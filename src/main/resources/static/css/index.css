@@ -1,0 +1,27 @@
+* {
+    font-family: 微软雅黑;
+    margin: 0px;
+    padding: 0px;
+}
+
+.s {
+    border: 1px solid red;
+}
+
+.body-section {
+    margin: 2% 0% 0% 0%;
+}
+
+.btn-button {
+    margin: 0% 3% 1% 0%;
+}
+
+.cursor:hover {
+    cursor: pointer;
+}
+
+thead {
+    font-weight: bold;
+    font-size: 18px;
+}
+

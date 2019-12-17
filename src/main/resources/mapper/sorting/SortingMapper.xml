@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.comm.dao.sorting.SortingMapper">
+
+    <!--查询记录-->
+    <select id="getListSorting" resultType="Sorting">
+        select * from sorting s inner join barcodes b on s.order_Barcode=b.order_Barcode
+    </select>
+
+    <!--根据条形码来区分-->
+    <select id="getSorting" resultType="Sorting">
+        select * from sorting where order_Barcode=#{order_Barcode}
+    </select>
+
+   <!-- <select id="getSorting" resultType="Sorting">
+        select * from sorting
+        <trim prefix="where" prefixOverrides="and | or">
+            1=1
+            <if test="barcode != null and barcode !=''">
+                and order_Barcode =#{barcode}
+            </if>
+        </trim>
+    </select>-->
+
+</mapper>
