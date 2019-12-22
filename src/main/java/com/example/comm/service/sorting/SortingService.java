@@ -11,19 +11,7 @@ import java.util.List;
  * Sorting实现层
  */
 public interface SortingService {
-    /**
-     * 查询记录信息
-     *
-     * @return
-     */
-    public List<Sorting> getListSorting();
 
-    /**
-     * 通过条形码查询,返回一个对象
-     * @param barcode
-     * @return
-     */
-    public Sorting getSorting(@Param("barcode") String barcode);
 
 
 

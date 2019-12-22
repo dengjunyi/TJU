@@ -5,7 +5,7 @@
 <mapper namespace="com.example.comm.dao.ng.NgMapper">
 
     <!--根据条形码来区分-->
-    <select id="getNg" resultType="ng">
+    <select id="getNg" resultType="com.example.comm.pojo.ng.Ng">
        SELECT * FROM ng ORDER BY n_id DESC LIMIT 0,1
     </select>
 

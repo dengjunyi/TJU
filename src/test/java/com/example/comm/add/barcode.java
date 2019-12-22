@@ -1,10 +1,13 @@
 package com.example.comm.add;
 
+import javax.sound.midi.SoundbankResource;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Scanner;
 
 public class barcode {
+    static Scanner input = new Scanner(System.in);
 
 
     public static void show() {
@@ -19,6 +22,11 @@ public class barcode {
         PreparedStatement ps8 = null;
         PreparedStatement ps9 = null;
         PreparedStatement ps10 = null;
+        PreparedStatement ps11 = null;
+        PreparedStatement ps12 = null;
+        PreparedStatement ps13 = null;
+        PreparedStatement ps14 = null;
+        PreparedStatement ps15 = null;
         ResultSet rs1 = null;
         ResultSet rs2 = null;
         ResultSet rs3 = null;
@@ -29,6 +37,12 @@ public class barcode {
         ResultSet rs8 = null;
         ResultSet rs9 = null;
         ResultSet rs10 = null;
+        ResultSet rs11 = null;
+        ResultSet rs12 = null;
+        ResultSet rs13 = null;
+        ResultSet rs14 = null;
+        ResultSet rs15 = null;
+
         try {
             //加载数据驱动
             Class.forName("com.mysql.jdbc.Driver");
@@ -39,19 +53,21 @@ public class barcode {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss ");
             //物品表
             //条形码
-            String barcode = "888";
+            String barcode = "";
             //订单号
-            String o_id = "10010";
+            String o_id = "";
             //数量
-            int number = 1;
+            int number = 0;
             //描述
             String b_Item_info = "";
 
 
             // 1:订单号存在,条形码不存在!添加到物品表,如果显示表有订单号的信息,则修改显示表的总数量,修改订单表的总数量,添加到临时表,
             //2.订单号和条形码同时存在!修改此条码的数量,如果显示表存在此订单号的信息,修改显示表此订单的总数量,修改此条码所对应订单表的总数量和状态,修改临时表此条码和订单号对应的信息的数量
-
-
+            System.out.println("请输入订单号:");
+            o_id = input.next();
+            System.out.println("请输入条形码:");
+            barcode = input.next();
             //订单号是否存在
             String sql8 = "SELECT * FROM barcode WHERE o_id=?";
             ps8 = connection.prepareStatement(sql8);
@@ -92,8 +108,19 @@ public class barcode {
                     ps5.setString(3, barcode);
                     ps5.executeUpdate();
                 } else {
+                    System.out.println("请输入物品的描述:");
+                    b_Item_info = input.next();
+                    System.out.println("请输入物品的数量:");
+                    number = input.nextInt();
                     //数据库不同时存在条形码和订单号这条信息,只存在订单号
                     System.out.println("存在订单号");
+                    //根据订单表的c_id获取客户名称
+                    String sql11 = "SELECT * FROM customer WHERE c_id=?";
+                    ps11 = connection.prepareStatement(sql11);
+                    ps11.setInt(1, rs4.getInt("c_id"));
+                    rs11 = ps11.executeQuery();
+                    rs11.next();
+
                     String sql9 = " INSERT INTO barcode(b_number,b_Item_info,b_barcode,o_id) VALUES (?,?,?,?)"; // 添加一条sql语句
                     // 创建一个Statment对象
                     ps9 = connection.prepareStatement(sql9);
@@ -107,7 +134,7 @@ public class barcode {
                     ps9.setString(4, o_id);
                     ps9.executeUpdate();
                     //添加到临时表一条信息
-                    String sql10 = "INSERT INTO sorting(s_orderid,s_category,s_Item_info,s_count,s_barcode,s_customername,s_number,order_time) VALUES (?,?,?,?,?,?,?,?)"; // 添加一条sql语句
+                    String sql10 = "INSERT INTO sorting(s_orderid,s_category,s_Item_info,s_count,s_barcode,customer_name,s_number,order_time) VALUES (?,?,?,?,?,?,?,?)"; // 添加一条sql语句
                     ps10 = connection.prepareStatement(sql10);
                     //订单号
                     ps10.setString(1, o_id);
@@ -120,7 +147,7 @@ public class barcode {
                     //条形码
                     ps10.setString(5, barcode);
                     //客户名称
-                    ps10.setString(6, rs4.getString("o_customername"));
+                    ps10.setString(6, rs11.getString("customer_name"));
                     //订单状态
                     ps10.setInt(7, 0);
                     //时间
@@ -150,7 +177,52 @@ public class barcode {
                 System.out.println("");
                 ps3.executeUpdate();
                 System.out.println("修改订单表:" + ps3.executeUpdate());
+
+                //详细表添加一条数据
+
+
             } else {
+                System.out.println("没有关于此订单的信息");
+                System.out.println("开始创建新订单");
+                System.out.println("请输入客户的ID");
+                int c_id = input.nextInt();
+                //判断客户表没有这个ID
+                String sql12 = "SELECT * FROM customer WHERE c_id=?";
+                ps12 = connection.prepareStatement(sql12);
+                ps12.setInt(1, c_id);
+                rs12 = ps12.executeQuery();
+                if (rs12.next()) {
+                    System.out.println("存在此客户");
+                    System.out.println("请输入新创建的订单号:");
+                    o_id = input.next();
+                    //判断客户表没有这个ID
+                    String sql13 = "SELECT * FROM orders WHERE o_orderid=? AND c_id=?";
+                    ps13 = connection.prepareStatement(sql13);
+                    ps13.setString(1, o_id);
+                    ps13.setInt(2, c_id);
+                    rs13 = ps13.executeQuery();
+                    boolean isbean = true;
+                    if (rs13.first()) {
+                        System.out.println("已有客户已有此订单");
+                    } else {
+                        System.out.println("添加此客户的订单");
+                        String sql14 = "INSERT INTO orders(o_orderid,o_category,o_Specifications,o_number,o_complete,c_id,o_port) VALUES (?,?,?,0,0,?,NULL)"; // 添加一条sql语句
+                        ps14 = connection.prepareStatement(sql14);
+                        //订单号
+                        ps14.setString(1, o_id);
+                        System.out.println("请输入品类:");
+                        String o_category=input.next();
+                        ps14.setString(2, o_category);
+                        System.out.println("请输入规格:");
+                        String o_Specifications=input.next();
+                        ps14.setString(3, o_Specifications);
+                        ps14.setInt(4, c_id);
+                        ps14.executeUpdate();
+                    }
+
+                }
+
+
                 //不存在此数据,添加到物品表
               /*  String sql8 = " INSERT INTO barcode(b_number,b_Item_info,b_barcode,o_id) VALUES (?,?,?,?)"; // 添加一条sql语句
                 // 创建一个Statment对象

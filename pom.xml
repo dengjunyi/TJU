@@ -73,7 +73,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
+        <!-- scoket -->
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>

@@ -1,6 +1,8 @@
 package com.example.comm.server;
 
 
+import com.example.comm.controller.SortingController;
+import com.example.comm.pojo.ng.Ng;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
@@ -16,6 +18,8 @@ import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static java.lang.Integer.parseInt;
+
 public class WebSocketServerHandler2 extends ChannelHandlerAdapter {
 
     public static ChannelGroup group = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
@@ -30,6 +34,9 @@ public class WebSocketServerHandler2 extends ChannelHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         System.out.println("************* 硬件channelRead *************");
+      /*  Ng ng = SortingController.ngService2.getNg();
+        System.out.println("NG22:"+ng.getN_date());*/
+        System.out.println("ChannelHandlerContext" + ctx.name());
         System.out.println("msg" + msg);
         String inputStr;
         if (msg instanceof String) {
@@ -69,6 +76,11 @@ public class WebSocketServerHandler2 extends ChannelHandlerAdapter {
             PreparedStatement preparedStatement18 = null;
             PreparedStatement preparedStatement19 = null;
             PreparedStatement preparedStatement20 = null;
+            PreparedStatement preparedStatement21 = null;
+            PreparedStatement preparedStatement22 = null;
+            PreparedStatement preparedStatement23 = null;
+            PreparedStatement preparedStatement24 = null;
+            PreparedStatement preparedStatement25 = null;
 
             //结果集对象
             ResultSet resultSet1 = null;
@@ -90,6 +102,11 @@ public class WebSocketServerHandler2 extends ChannelHandlerAdapter {
             ResultSet resultSet18 = null;
             ResultSet resultSet19 = null;
             ResultSet resultSet20 = null;
+            ResultSet resultSet21 = null;
+            ResultSet resultSet22 = null;
+            ResultSet resultSet23 = null;
+            ResultSet resultSet24 = null;
+            ResultSet resultSet25 = null;
 
             //获取当前时间
             Date d = new Date();
@@ -97,7 +114,6 @@ public class WebSocketServerHandler2 extends ChannelHandlerAdapter {
             //System.out.println("格式化输出：" + sdf.format(d));
             //获取存在此条形码的所有订单号
             String o_orderid = null;
-
             //返回值给端口的值
             String echoContent;
             try {
@@ -108,7 +124,6 @@ public class WebSocketServerHandler2 extends ChannelHandlerAdapter {
 
                 //判断是否返回值给端口
                 Boolean isBean = true;
-                System.out.println("1" + inputStr);
                 String sub1 = inputStr.substring(0, inputStr.length() - 1);
                 System.out.println("截取最后一个字符串生成的新字符串为: " + inputStr.substring(0, inputStr.length() - 1));//abcdef
                 String sub2 = inputStr.substring(inputStr.length() - 1);
@@ -152,67 +167,177 @@ public class WebSocketServerHandler2 extends ChannelHandlerAdapter {
                     isBean = false;
                 }
 
-                // if (isBean) {
-                //自动分配端口
+                //自动分配端口,分配给订单端口
                 String sql13 = "SELECT * FROM porttable WHERE p_state=0";
                 preparedStatement13 = connection.prepareStatement(sql13);
                 resultSet13 = preparedStatement13.executeQuery();
                 //端口
                 String port = "";
-                //订单号
+                //客户未分拣完成的ID
+                String c_id = "";
+                //订单号(客户所对应的未分配订单ID)
                 String order = "";
+                //获取端口未被分配的端口号
                 while (resultSet13.next()) {
                     port += resultSet13.getString("p_port") + ",";
                 }
+                System.out.println("所有未分配的端口号:" + port);
                 if (!port.isEmpty()) {
                     System.out.println("自动分配端口号");
                     String[] split = port.split(",");
+
                     for (int i = 0; i < split.length; i++) {
-                        //System.out.println(order);
                         System.out.println("端口号:" + split[i]);
-                        String sql4 = "SELECT * FROM orders WHERE o_complete=0 AND ISNULL(o_port) OR  o_port =''";
-                        preparedStatement14 = connection.prepareStatement(sql4);
-                        resultSet14 = preparedStatement14.executeQuery();
-                        while (resultSet14.next()) {
-                            order += resultSet14.getString("o_orderid") + ",";
-                        }
-                        System.out.println("order" + order);
-                        if (order != "" || order == null) {
-                            String[] splits = order.split(",");
-                            for (int j = 0; j < splits.length; i++) {
-                                System.out.println("订单号" + splits[i]);
-                                String sql15 = "UPDATE orders SET o_port=? WHERE o_orderid=?";
-                                preparedStatement15 = connection.prepareStatement(sql15);
-                                preparedStatement15.setString(1, split[i]);
-                                preparedStatement15.setString(2, splits[i]);
-                                preparedStatement15.executeUpdate();
-                                String sql16 = "UPDATE porttable SET p_state=1 WHERE p_port=?";
-                                preparedStatement16 = connection.prepareStatement(sql16);
-                                preparedStatement16.setString(1, split[i]);
-                                preparedStatement16.executeUpdate();
-                                System.out.println("66" + preparedStatement15.executeUpdate() + preparedStatement16.executeUpdate());
-                                break;
+                        //根据客户分拣
+                        if (inputStr.equals("1")) {
+                            //订单号(客户所对应的未分配订单ID)
+                            //客户未分拣完成的ID
+
+                            //获取所有客户未分拣完成
+                            String sql12 = "SELECT * FROM customer WHERE c_complete=0 AND c_state=0";
+                            preparedStatement12 = connection.prepareStatement(sql12);
+                            resultSet12 = preparedStatement12.executeQuery();
+                            c_id = "";
+                            while (resultSet12.next()) {
+                                c_id += resultSet12.getInt("c_id") + ",";
+                            }
+                            System.out.println("所有未分配的客户ID:" + c_id);
+                            if (!c_id.isEmpty()) {
+                                System.out.println("有客户还未完成分拣");
+                                String[] splits = c_id.split(",");
+                                for (int i1 = 0; i1 < splits.length; i1++) {
+                                    if (splits[i1].isEmpty()) {
+                                        System.out.println("未分拣完的客户的订单已有端口号");
+                                        break;
+                                    }
+                                    order = "";
+                                    System.out.println("i:" + i);
+                                    System.out.println("i1:" + i1);
+                                    System.out.println("客户所对应的ID:" + splits[i1]);
+                                    //查询此客户的订单里未分拣完成的订单
+                                    String sql21 = "SELECT * FROM orders WHERE c_id=? AND o_complete=0 AND IFNULL(o_port,'')=''";
+                                    preparedStatement21 = connection.prepareStatement(sql21);
+                                    //客户ID
+                                    preparedStatement21.setInt(1, parseInt(splits[i1]));
+                                    resultSet21 = preparedStatement21.executeQuery();
+
+                                    while (resultSet21.next()) {
+                                        order += resultSet21.getString("o_orderid") + ",";
+                                    }
+                                    if (order.isEmpty()) {
+                                        break;
+                                    }
+                                    System.out.println("客户所对应的订单号:" + order);
+                                    if (!order.isEmpty()) {
+                                        String[] splitss = order.split(",");
+                                        int s = splitss.length;
+                                        for (int k = 0; k < splitss.length; k++) {
+                                            System.out.println("s" + s);
+                                            System.out.println("订单号" + splitss[k]);
+                                            //修改订单表,分配给订单端口号
+                                            String sql15 = "UPDATE orders SET o_port=? WHERE o_orderid=?";
+                                            preparedStatement15 = connection.prepareStatement(sql15);
+                                            //端口号
+                                            preparedStatement15.setString(1, split[i]);
+                                            //订单号
+                                            preparedStatement15.setString(2, splitss[k]);
+                                            preparedStatement15.executeUpdate();
+                                            //修改这个端口的状态
+                                            String sql16 = "UPDATE porttable SET p_state=1 WHERE p_port=?";
+                                            preparedStatement16 = connection.prepareStatement(sql16);
+                                            //端口号
+                                            preparedStatement16.setString(1, split[i]);
+                                            preparedStatement16.executeUpdate();
+                                            System.out.println("66" + preparedStatement15.executeUpdate() + preparedStatement16.executeUpdate());
+                                            break;
+                                        }
+                                        //修改此订单端口分配状态
+                                        String sql22 = "SELECT * FROM orders WHERE c_id=? AND o_complete=0 AND IFNULL(o_port,'')=''";
+                                        preparedStatement22 = connection.prepareStatement(sql22);
+                                        //客户ID
+                                        System.out.println("ID:" + splits[i1]);
+                                        preparedStatement22.setInt(1, parseInt(splits[i1]));
+                                        resultSet22 = preparedStatement22.executeQuery();
+                                        int count = 0;
+                                        while (resultSet22.next()) {
+                                            count++;
+                                        }
+                                        System.out.println("count:" + count);
+                                        if (count == 0) {
+                                            //客户的所有订单都分配到端口号,修改客户的端口分配状态
+                                            String sql23 = "UPDATE customer SET c_state=1 WHERE c_id=?";
+                                            preparedStatement23 = connection.prepareStatement(sql23);
+                                            // System.out.println("修改的ID:"+splits[i]);
+                                            System.out.println("修改的ID:" + splits[i1]);
+                                            preparedStatement23.setInt(1, parseInt(splits[i1]));
+                                            preparedStatement23.executeUpdate();
+                                            System.out.println("修改:" + preparedStatement23.executeUpdate());
+                                            break;
+                                        } else {
+                                            System.out.println("进行下一轮端口分配");
+                                            break;
+                                        }
+                                    }
+                                }
+                            } else {
+                                System.out.println("没有要分配的客户");
                             }
                         }
+                        //根据订单分拣
+                        if (inputStr.equals("2")) {
+                            System.out.println("根据订单自动分配端口号");
+                            //查询订单表未分拣完成的和未分配端口号
+                            String sql4 = "SELECT * FROM orders WHERE o_complete=0 AND ISNULL(o_port) OR  o_port =''";
+                            preparedStatement14 = connection.prepareStatement(sql4);
+                            resultSet14 = preparedStatement14.executeQuery();
+                            order = "";
+                            while (resultSet14.next()) {
+                                order += resultSet14.getString("o_orderid") + ",";
+                            }
+                            if (order.isEmpty()) {
+                                break;
+                            }
+                            System.out.println("order" + order);
+                            if (order != "" || order == null) {
+                                String[] splits = order.split(",");
+                                for (int j = 0; j < splits.length; i++) {
+                                    System.out.println("订单号" + splits[j]);
+                                    //修改订单表,分配给订单端口号
+                                    String sql15 = "UPDATE orders SET o_port=? WHERE o_orderid=?";
+                                    preparedStatement15 = connection.prepareStatement(sql15);
+                                    //端口号
+                                    preparedStatement15.setString(1, split[i]);
+                                    //订单号
+                                    preparedStatement15.setString(2, splits[j]);
+                                    preparedStatement15.executeUpdate();
+                                    //修改这个端口的状态
+                                    String sql16 = "UPDATE porttable SET p_state=1 WHERE p_port=?";
+                                    preparedStatement16 = connection.prepareStatement(sql16);
+                                    //端口号
+                                    preparedStatement16.setString(1, split[i]);
+                                    preparedStatement16.executeUpdate();
+                                    System.out.println("66" + preparedStatement15.executeUpdate() + preparedStatement16.executeUpdate());
+                                    break;
+                                }
+                            }
+                        }
+
                     }
                 } else {
                     System.out.println("为空");
                 }
 
 
-                //定义sql语句，问号表示占位符
-                String sql1 = "select * from barcode where b_barcode = ?";// 查询sql语句
+                //查询条形码
+                String sql1 = "select * from barcode where b_barcode = ?";
                 //获取预处理statement
                 preparedStatement1 = connection.prepareStatement(sql1);
                 //preparedStatement1，第一个参数为sql语句的序号（从1开始），第二个参数为设置的参数值
                 preparedStatement1.setString(1, inputStr);
                 //向数据库发出sql执行查询，查询出结果集
                 resultSet1 = preparedStatement1.executeQuery();
-                //  System.out.println("物品表是否存在此条形码:" + resultSet1.next());
                 echoContent = "&00";
                 //条形码在数据库存在
-
-
                 while (resultSet1.next()) {
                     o_orderid += "," + resultSet1.getString("o_id");
                 }
@@ -225,25 +350,25 @@ public class WebSocketServerHandler2 extends ChannelHandlerAdapter {
                     String[] split = o_orderid.split(",");
                     for (int i = 0; i < split.length; i++) {
                         //System.out.print(split[i]+" ");
-                        //根据订单ID获取订单表
+                        //根据订单ID和条形码查询详细表
                         String sql7 = "SELECT * FROM sorting WHERE s_orderid=? AND s_barcode=?";// 查询sql语句
                         preparedStatement7 = connection.prepareStatement(sql7);
                         preparedStatement7.setString(1, split[i]);
                         preparedStatement7.setString(2, inputStr);
                         resultSet7 = preparedStatement7.executeQuery();
                         //判断详细表是否存在关于这条条形码和订单号的信息
-                        System.out.println("详细表是否存在关于这条条形码和订单号的信息:" + resultSet7.next());
                         System.out.println("订单号" + split[i]);
                         resultSet7.next();
                         if (resultSet7.first()) {
                             System.out.println("进入resultSet7");
-                            //获取物品的信息
+                            //根据条形码和订单ID获取物品表的信息
                             String sql9 = "SELECT * FROM barcode WHERE b_barcode = ? AND o_id=?";
                             preparedStatement9 = connection.prepareStatement(sql9);
                             preparedStatement9.setString(1, inputStr);
                             preparedStatement9.setString(2, split[i]);
                             resultSet9 = preparedStatement9.executeQuery();
                             resultSet9.next();
+                            //物品描述
                             String b_Item_info = resultSet9.getString("b_Item_info");
                             int b_number = resultSet9.getInt("b_number");
                             //根据订单ID获取订单表
@@ -254,7 +379,14 @@ public class WebSocketServerHandler2 extends ChannelHandlerAdapter {
                             System.out.println("sql2" + sql2);
                             //通过订单表获取到客户名称
                             resultSet2.next();
-                            System.out.println("客户公司名称:" + resultSet2.getString("o_customername"));
+                            //根据订单表的c_id获取客户名称
+                            String sql11 = "SELECT * FROM customer WHERE c_id=?";
+                            preparedStatement11 = connection.prepareStatement(sql11);
+                            preparedStatement11.setInt(1, resultSet2.getInt("c_id"));
+                            resultSet11 = preparedStatement11.executeQuery();
+                            resultSet11.next();
+
+                            System.out.println("客户公司名称:" + resultSet11.getString("customer_name"));
                             echoContent = resultSet2.getString("o_port");
                             if (resultSet7.getInt("s_count") == resultSet7.getInt("s_number")) {
                                 System.out.println("此条形码在这个" + split[i] + "订单号已分拣完成,判断下一个订单号");
@@ -323,29 +455,29 @@ public class WebSocketServerHandler2 extends ChannelHandlerAdapter {
                                 // 创建一个Statment对象
                                 ps = connection.prepareStatement(sql3);
                                 ps.setString(1, split[i]);
-                                System.out.println("1" + split[i]);
+                                System.out.println("订单号:" + split[i]);
                                 ps.setString(2, inputStr);
-                                System.out.println("2" + inputStr);
+                                System.out.println("条形码:" + inputStr);
                                 ps.setString(3, echoContent);
-                                System.out.println("3" + echoContent);
+                                System.out.println("指令:" + echoContent);
                                 ps.setInt(4, resultSet2.getInt("o_number"));
-                                //  System.out.println("4" + resultSet1.getString("o_number"));
+                                System.out.println("此订单的总数量:" + resultSet2.getInt("o_number"));
                                 ps.setString(5, resultSet2.getString("o_Specifications"));
-                                System.out.println("5" + resultSet2.getString("o_Specifications"));
+                                System.out.println("规格:" + resultSet2.getString("o_Specifications"));
                                 //resultSet1.next();
                                 ps.setString(6, b_Item_info);
-                                System.out.println("6" + b_Item_info);
+                                System.out.println("物品描述:" + b_Item_info);
                                 ps.setString(7, sdf.format(d));
-                                System.out.println("7" + sdf.format(d));
-                                ps.setString(8, resultSet2.getString("o_customername"));
-                                System.out.println("8" + resultSet2.getString("o_customername"));
+                                System.out.println("时间:" + sdf.format(d));
+                                ps.setString(8, resultSet11.getString("customer_name"));
+                                System.out.println("客户名称:" + resultSet11.getString("customer_name"));
                                 ps.setInt(9, 1);
                                 ps.executeUpdate();
 
                                 //判断是否只有一个数量
-                              /*  if (b_number == 1) {
+                                if (b_number == 1) {
                                     echoContent = "&0f";
-                                }*/
+                                }
                                 // 关闭数据库连接对象
                                 // connection.close();
                                 System.out.println("插入完毕！！！");
@@ -393,9 +525,10 @@ public class WebSocketServerHandler2 extends ChannelHandlerAdapter {
                     System.out.println("返回给端口的值:" + echoContent);
                     ByteBuf echoBuf = Unpooled.buffer(echoContent.length());
                     echoBuf.writeBytes(echoContent.getBytes());
+                    //System.out.println("33"+group.name());
                     group.writeAndFlush(echoBuf);
+
                 }
-                // }
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
@@ -414,9 +547,142 @@ public class WebSocketServerHandler2 extends ChannelHandlerAdapter {
                         e.printStackTrace();
                     }
                 }
+               /* if (resultSet3 != null) {
+                    try {
+                        resultSet3.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }*/
+                if (resultSet4 != null) {
+                    try {
+                        resultSet4.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
                 if (resultSet6 != null) {
                     try {
                         resultSet6.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (resultSet7 != null) {
+                    try {
+                        resultSet7.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (resultSet8 != null) {
+                    try {
+                        resultSet8.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (resultSet9 != null) {
+                    try {
+                        resultSet9.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (resultSet10 != null) {
+                    try {
+                        resultSet10.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (resultSet11 != null) {
+                    try {
+                        resultSet11.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (resultSet12 != null) {
+                    try {
+                        resultSet12.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (resultSet13 != null) {
+                    try {
+                        resultSet13.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (resultSet14 != null) {
+                    try {
+                        resultSet14.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (resultSet15 != null) {
+                    try {
+                        resultSet15.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (resultSet16 != null) {
+                    try {
+                        resultSet16.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (resultSet17 != null) {
+                    try {
+                        resultSet17.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (resultSet18 != null) {
+                    try {
+                        resultSet18.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (resultSet19 != null) {
+                    try {
+                        resultSet19.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (resultSet20 != null) {
+                    try {
+                        resultSet20.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (resultSet21 != null) {
+                    try {
+                        resultSet21.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (resultSet22 != null) {
+                    try {
+                        resultSet22.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (resultSet23 != null) {
+                    try {
+                        resultSet23.close();
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
@@ -452,6 +718,139 @@ public class WebSocketServerHandler2 extends ChannelHandlerAdapter {
                 if (preparedStatement5 != null) {
                     try {
                         preparedStatement1.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (preparedStatement6 != null) {
+                    try {
+                        preparedStatement6.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (preparedStatement7 != null) {
+                    try {
+                        preparedStatement7.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (preparedStatement8 != null) {
+                    try {
+                        preparedStatement8.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (preparedStatement9 != null) {
+                    try {
+                        preparedStatement9.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (preparedStatement10 != null) {
+                    try {
+                        preparedStatement10.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (preparedStatement11 != null) {
+                    try {
+                        preparedStatement11.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (preparedStatement12 != null) {
+                    try {
+                        preparedStatement12.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (preparedStatement13 != null) {
+                    try {
+                        preparedStatement13.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (preparedStatement14 != null) {
+                    try {
+                        preparedStatement14.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (preparedStatement15 != null) {
+                    try {
+                        preparedStatement15.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (preparedStatement16 != null) {
+                    try {
+                        preparedStatement16.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (preparedStatement17 != null) {
+                    try {
+                        preparedStatement17.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (preparedStatement18 != null) {
+                    try {
+                        preparedStatement18.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (preparedStatement19 != null) {
+                    try {
+                        preparedStatement19.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (preparedStatement20 != null) {
+                    try {
+                        preparedStatement20.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (preparedStatement21 != null) {
+                    try {
+                        preparedStatement21.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (preparedStatement22 != null) {
+                    try {
+                        preparedStatement22.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (preparedStatement23 != null) {
+                    try {
+                        preparedStatement23.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (preparedStatement24 != null) {
+                    try {
+                        preparedStatement24.close();
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }

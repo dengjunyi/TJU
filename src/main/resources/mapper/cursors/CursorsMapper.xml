@@ -6,7 +6,7 @@
 
 
     <!--根据条形码来区分-->
-    <select id="getCursorsBybarcode" resultType="cursors">
+    <select id="getCursorsBybarcode" resultType="com.example.comm.pojo.cursors.Cursors">
         select * from cursors where c_order=#{c_order}
     </select>
 
