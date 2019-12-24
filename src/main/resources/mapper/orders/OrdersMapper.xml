@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.comm.dao.Orders.OrdersMapper">
+    <select id="getOrdersByCid" resultType="com.example.comm.pojo.orders.Orders">
+        SELECT * FROM orders WHERE c_id=#{c_id} AND o_complete=0 AND IFNULL(o_port,'')=''
+    </select>
+
+    <update id="updateOrdersByOidPort">
+        UPDATE orders SET o_port=#{o_port} WHERE o_orderid=#{o_orderid}
+    </update>
+    <update id="updateOrdersByOid">
+        UPDATE orders SET o_complete=1 WHERE o_orderid=#{o_orderid}
+    </update>
+
+    <select id="getOrders" resultType="com.example.comm.pojo.orders.Orders">
+        SELECT * FROM orders WHERE o_complete=0 AND ISNULL(o_port) OR  o_port =''
+    </select>
+
+    <select id="getOrdersByOid" resultType="com.example.comm.pojo.orders.Orders">
+        select * from orders where o_orderid = #{o_orderid}
+    </select>
+    <select id="getOrdersByCids" resultType="java.lang.Integer">
+        SELECT count(1) FROM orders WHERE c_id=#{c_id} AND o_complete=0
+    </select>
+
+
+</mapper>

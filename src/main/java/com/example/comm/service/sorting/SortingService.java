@@ -12,6 +12,15 @@ import java.util.List;
  */
 public interface SortingService {
 
+    /**
+     * 通过订单号和条形码查询出详细信息
+     */
+    public Sorting getSortingByOidByBarcode(String s_orderid,String s_barcode) throws Exception;
+
+    /**
+     * 修改详细表的信息
+     */
+    public int updateSorting(Sorting sorting) throws Exception;
 
 
 

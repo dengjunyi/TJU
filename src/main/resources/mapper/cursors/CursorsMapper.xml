@@ -3,7 +3,14 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.comm.dao.cursors.CursorsMapper">
+    <insert id="addCursors">
+        insert into cursors (c_order,c_barcode,c_out,c_count,c_specification,c_Item_info,c_time,c_customername,c_number)
+        values(#{c_order},#{c_barcode},#{c_out},#{c_count},#{c_specification},#{c_Item_info},#{c_time},#{c_customername},#{c_number})
+    </insert>
 
+    <update id="updateCursors" parameterType="com.example.comm.pojo.cursors.Cursors">
+        UPDATE cursors SET c_number=#{c_number},c_barcode=#{c_barcode},c_time=#{c_time} WHERE c_order=#{c_order}
+    </update>
 
     <!--根据条形码来区分-->
     <select id="getCursorsBybarcode" resultType="com.example.comm.pojo.cursors.Cursors">

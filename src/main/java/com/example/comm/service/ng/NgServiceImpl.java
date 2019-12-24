@@ -16,4 +16,9 @@ public class NgServiceImpl implements NgService{
     public Ng getNg() throws Exception {
         return ngMapper.getNg();
     }
+
+    @Override
+    public int addNg(Ng ng) throws Exception {
+        return ngMapper.addNg(ng);
+    }
 }

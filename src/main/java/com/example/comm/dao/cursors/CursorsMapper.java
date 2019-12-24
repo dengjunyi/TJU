@@ -12,4 +12,21 @@ public interface CursorsMapper {
      * @throws Exception
      */
     public Cursors getCursorsBybarcode(@Param("c_order") String c_order) throws Exception;
+
+    /**
+     * 修改临时表
+     * @param cursors
+     * @return
+     * @throws Exception
+     */
+    public int updateCursors(Cursors cursors) throws Exception;
+
+    /**
+     * 添加一条临时表的信息
+     * @param cursors
+     * @return
+     * @throws Exception
+     */
+    public int addCursors(Cursors cursors) throws Exception;
+
 }

@@ -5,7 +5,12 @@ import com.example.comm.pojo.ng.Ng;
 import com.example.comm.pojo.sorting.Sorting;
 import com.example.comm.server.WebSocketServer;
 import com.example.comm.server.WebSocketServer2;
+import com.example.comm.service.Orders.OrdersService;
+import com.example.comm.service.barcode.BarcodeService;
+import com.example.comm.service.cursors.CursoursService;
+import com.example.comm.service.customer.CustomerService;
 import com.example.comm.service.ng.NgService;
+import com.example.comm.service.porttable.PorttableService;
 import com.example.comm.service.sorting.SortingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -22,18 +27,34 @@ import java.util.List;
 public class ApplicationRunnerTest implements ApplicationRunner {
 
     @Resource
+    private BarcodeService barcodeService;
+    @Resource
+    private CursoursService cursoursService;
+    @Resource
+    private CustomerService customerService;
+    @Resource
+    private NgService ngService;
+    @Resource
+    private OrdersService ordersService;
+    @Resource
+    private PorttableService porttableService;
+    @Resource
     private SortingService sortingService;//获取资源
 
-    @Resource
-    private NgService ngService;//获取资源
+
+
 
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-
+        SortingController.barcodeService2 = barcodeService;
+        SortingController.cursoursService2 = cursoursService;
+        SortingController.customerService2 = customerService;
         SortingController.ngService2 = ngService;
-      /*  Ng ng = SortingController.ngService2.getNg();
-        System.out.println("NG:"+ng.getN_date());*/
+        SortingController.ordersService2 = ordersService;
+        SortingController.porttableService2 = porttableService;
+        SortingController.sortingService2 = sortingService;
+
 
         new Thread(new Runnable() {
             @Override

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.comm.dao.barcode.BarcodeMapper">
+
+    <select id="getBarcodeByBarcode" resultType="com.example.comm.pojo.barcode.Barcode">
+        select * from barcode where b_barcode = #{b_barcode}
+    </select>
+    <select id="getBarcodeByOidByBarcode" resultType="com.example.comm.pojo.barcode.Barcode">
+        SELECT * FROM barcode WHERE b_barcode = #{b_barcode} AND o_id=#{o_id}
+    </select>
+</mapper>

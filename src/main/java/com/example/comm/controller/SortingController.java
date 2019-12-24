@@ -5,8 +5,12 @@ import com.example.comm.pojo.cursors.Cursors;
 
 
 import com.example.comm.pojo.ng.Ng;
+import com.example.comm.service.Orders.OrdersService;
+import com.example.comm.service.barcode.BarcodeService;
 import com.example.comm.service.cursors.CursoursService;
+import com.example.comm.service.customer.CustomerService;
 import com.example.comm.service.ng.NgService;
+import com.example.comm.service.porttable.PorttableService;
 import com.example.comm.service.sorting.SortingService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +37,8 @@ public class SortingController {
     @Resource
     public SortingService sortingService;//获取资源
 
-    public static SortingService sortingService2;//获取资源
 
-  /*  @Resource
-    public void setSortingService(SortingService sortingService) {
-        this.sortingService = sortingService;
-    }*/
+
 
     @Resource
     private CursoursService cursoursService;//获取资源
@@ -46,7 +46,16 @@ public class SortingController {
     @Resource
     private NgService ngService;//获取资源
 
+
+
+    public static BarcodeService barcodeService2;//获取资源
+    public static CursoursService cursoursService2;//获取资源
+    public static CustomerService customerService2;//获取资源
     public static NgService ngService2;//获取资源
+    public static OrdersService ordersService2;
+    public static PorttableService porttableService2;
+    public static SortingService sortingService2;//获取资源
+
 
     @RequestMapping("/index")
     public String helloSpringBoot() {
@@ -61,6 +70,9 @@ public class SortingController {
         System.out.println("进行AJAX");
         System.out.println("order" + order);
         Cursors cursors = cursoursService.getCursorsBybarcode(order);//把获取到的记录存到List里
+        System.out.println("时间:"+cursors.getC_time());
+        String c_item_info = cursors.getC_Item_info();
+        System.out.println("描述:"+c_item_info);
         return cursors;
     }
 

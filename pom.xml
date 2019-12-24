@@ -166,7 +166,18 @@
             <version>1.1.1</version>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.18</version>
+        </dependency>
+        <!-- &lt;!&ndash;实体类生成get和set的依赖&ndash;&gt;
+         <dependency>
+             <groupId>org.projectlombok</groupId>
+             <artifactId>lombok</artifactId>
+             <version>1.18.8</version>
+             <scope>provided</scope>
+         </dependency>-->
 
     </dependencies>
 

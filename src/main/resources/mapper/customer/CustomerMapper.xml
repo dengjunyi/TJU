@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.comm.dao.customer.CustomerMapper">
+    <select id="getCustomerBystate" resultType="com.example.comm.pojo.customer.Customer">
+        SELECT * FROM customer WHERE c_complete=0 AND c_state=0
+    </select>
+    <select id="getCustomerByCid" resultType="com.example.comm.pojo.customer.Customer">
+        SELECT * FROM customer WHERE c_id=#{c_id}
+    </select>
+
+    <update id="updateCustomerByCid">
+        UPDATE customer SET c_state=1 WHERE c_id=#{c_id}
+    </update>
+    <update id="updateCustomerByCids">
+         UPDATE customer SET c_complete=1 WHERE c_id=#{c_id}
+    </update>
+
+
+</mapper>

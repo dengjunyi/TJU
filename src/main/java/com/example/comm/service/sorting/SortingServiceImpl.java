@@ -19,6 +19,13 @@ public class SortingServiceImpl implements SortingService {
     private SortingMapper sortingMapper;//获取资源
 
 
+    @Override
+    public Sorting getSortingByOidByBarcode(String s_orderid, String s_barcode) throws Exception {
+        return sortingMapper.getSortingByOidByBarcode(s_orderid,s_barcode);
+    }
 
-
+    @Override
+    public int updateSorting(Sorting sorting) throws Exception {
+        return sortingMapper.updateSorting(sorting);
+    }
 }
