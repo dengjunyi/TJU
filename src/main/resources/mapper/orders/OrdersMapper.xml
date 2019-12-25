@@ -25,5 +25,19 @@
         SELECT count(1) FROM orders WHERE c_id=#{c_id} AND o_complete=0
     </select>
 
+    <resultMap type="com.example.comm.pojo.orders.Orders" id="ordersBY">
+        <id property="id" column="id" />
+        <result property="o_orderid" column="o_orderid" />
+        <result property="o_port" column="o_port" />
+        <result property="c_id" column="c_id" />
+        <collection property="customer" ofType="com.example.comm.pojo.customer.Customer">
+            <id property="c_id" column="c_ids" />
+            <result property="customer_name" column="customer_name" />
+        </collection>
+    </resultMap>
+    <select id="getOrdersByCustomer" resultMap="ordersBY">
+        SELECT * FROM orders o INNER JOIN customer c ON c.c_id=o.c_id WHERE IFNULL(o.o_port,'')!='' ORDER BY o.c_id
+    </select>
+
 
 </mapper>

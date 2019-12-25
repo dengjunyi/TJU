@@ -21,7 +21,6 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.CharsetUtil;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
-import javax.sound.midi.SoundbankResource;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,7 +28,8 @@ import java.util.List;
 
 import static java.lang.Integer.parseInt;
 
-public class WebSocketServerHandler2 extends ChannelHandlerAdapter {
+//把自动分配写为一个方法
+public class WebSocketServerHandler2_dingdanhao4 extends ChannelHandlerAdapter {
 
 
     public static ChannelGroup group = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
@@ -134,11 +134,129 @@ public class WebSocketServerHandler2 extends ChannelHandlerAdapter {
                         }
                         //根据客户分拣
                         if (inputStr.equals("customer")) {
-                            show1(split[i], c_id, order);
+                           // show1(split[i],c_id,order);
+                            System.out.println("跟据客户分配端口");
+                            //订单号(客户所对应的未分配订单ID)
+                            List<Customer> customerBystate = SortingController.customerService2.getCustomerBystate();
+                            c_id = "";
+                            if (customerBystate.size() > 0) {
+                                for (Customer customer : customerBystate) {
+                                    c_id += customer.getC_id() + ",";
+                                }
+                                System.out.println("所有未分配的客户ID:" + c_id);
+                                System.out.println("有客户还未完成分拣");
+                                String[] splits = c_id.split(",");
+                                for (int i1 = 0; i1 < splits.length; i1++) {
+                                    if (splits[i1].isEmpty()) {
+                                        System.out.println("未分拣完的客户的订单已有端口号");
+                                        break;
+                                    }
+                                    order = "";
+                                    System.out.println("i:" + i);
+                                    System.out.println("i1:" + i1);
+                                    System.out.println("客户所对应的ID:" + splits[i1]);
+                                    //查询此客户的订单里未分拣完成的订单
+                                    List<Orders> ordersByCid = SortingController.ordersService2.getOrdersByCid(parseInt(splits[i1]));
+                                    System.out.println("ordersByCid:" + ordersByCid.size());
+                                    for (Orders orders : ordersByCid) {
+                                        order += orders.getO_orderid() + ",";
+                                    }
+                                    System.out.println("客户所对应的订单号:" + order);
+                                    if (order.isEmpty()) {
+                                        break;
+                                    }
+                                    if (!order.isEmpty()) {
+                                        String[] splitss = order.split(",");
+                                        int s = splitss.length;
+                                        for (int k = 0; k < splitss.length; k++) {
+                                            System.out.println("s" + s);
+                                            System.out.println("订单号" + splitss[k]);
+                                            //修改订单表,分配给订单端口号
+                                            int updateOrdersByOidPort = SortingController.ordersService2.updateOrdersByOidPort(split[i], splitss[k]);
+                                            System.out.println("updateOrdersByOidPort:" + updateOrdersByOidPort);
+                                            //修改这个端口的状态
+                                            int updatePorttableByPort = SortingController.porttableService2.updatePorttableByPort(split[i]);
+                                            System.out.println("updatePorttableByPort:" + updatePorttableByPort);
+                                            break;
+                                        }
+                                        //修改此订单端口分配状态(重复)
+                                        //客户ID
+                                        System.out.println("ID:" + splits[i1]);
+                                        List<Orders> ordersByCid1 = SortingController.ordersService2.getOrdersByCid(parseInt(splits[i1]));
+                                        System.out.println("ordersByCid1的个数1:" + ordersByCid1.size());
+                                        int count = 0;
+                                        for (Orders orders : ordersByCid1) {
+                                            count++;
+                                        }
+                                        System.out.println("count:" + count);
+                                        if (count == 0) {
+                                            //客户的所有订单都分配到端口号,修改客户的端口分配状态
+                                            System.out.println("修改的ID:" + splits[i1]);
+                                            int updateCustomerByCid = SortingController.customerService2.updateCustomerByCid(parseInt(splits[i1]));
+                                            System.out.println("updateCustomerByCid:" + updateCustomerByCid);
+                                            break;
+                                        } else {
+                                            System.out.println("进行下一轮端口分配");
+                                            break;
+                                        }
+
+                                    }
+                                }
+                            }
                         }
                         //根据订单分拣
                         if (inputStr.equals("barcode")) {
-                             show2(i,order,split[i]);
+                            System.out.println("根据订单自动分配端口号");
+                            //查询订单表未分拣完成的和未分配端口号
+                            List<Orders> ordersList = SortingController.ordersService2.getOrders();
+                            System.out.println("ordersList:" + ordersList);
+                            if (ordersList.size() > 0) {
+                                order = "";
+                                for (Orders orders : ordersList) {
+                                    order += orders.getO_orderid() + ",";
+                                }
+                                System.out.println("order" + order);
+                                if (order.isEmpty()) {
+                                    break;
+                                }
+                                if (order != "" || order == null) {
+                                    String[] splits = order.split(",");
+                                    for (int j = 0; j < splits.length; i++) {
+                                        System.out.println("订单号" + splits[j]);
+                                        System.out.println("端口号:" + split[i]);
+                                        //修改订单表,分配给订单端口号(重复)
+                                        int updateOrdersByOidPort = SortingController.ordersService2.updateOrdersByOidPort(split[i], splits[j]);
+                                        System.out.println("updateOrdersByOidPort:" + updateOrdersByOidPort);
+                                        //修改这个端口的状态(重复)
+                                        System.out.println("111");
+                                        SortingController.porttableService2.updatePorttableByPort(split[i]);
+                                        //修改此订单端口分配状态(重复)
+                                        System.out.println("2222");
+                                        //客户ID
+                                        System.out.println("订单ID:" + splits[j]);
+                                        Orders ordersByOid = SortingController.ordersService2.getOrdersByOid(splits[j]);
+                                        System.out.println("Cid:" + ordersByOid.getC_id());
+                                        List<Orders> ordersByCid1 = SortingController.ordersService2.getOrdersByCid(ordersByOid.getC_id());
+                                        System.out.println("ordersByCid1的个数1:" + ordersByCid1.size());
+                                        int count = 0;
+                                        for (Orders orders : ordersByCid1) {
+                                            count++;
+                                        }
+                                        System.out.println("count:" + count);
+                                        if (count == 0) {
+                                            //客户的所有订单都分配到端口号,修改客户的端口分配状态
+                                            System.out.println("修改的ID:" + ordersByOid.getC_id());
+                                            int updateCustomerByCid = SortingController.customerService2.updateCustomerByCid(ordersByOid.getC_id());
+                                            System.out.println("updateCustomerByCid:" + updateCustomerByCid);
+                                            // break;
+                                        } else {
+                                            System.out.println("进行下一轮端口分配");
+                                            // break;
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
                         }
                     }
                 } else {
@@ -343,7 +461,7 @@ public class WebSocketServerHandler2 extends ChannelHandlerAdapter {
         cause.printStackTrace();
     }
 
-    public static void show1(String port, String c_id, String order) throws Exception {
+    public static void show1(String port,String c_id,String order) throws Exception {
         System.out.println("跟据客户分配端口");
         //订单号(客户所对应的未分配订单ID)
         List<Customer> customerBystate = SortingController.customerService2.getCustomerBystate();
@@ -412,58 +530,6 @@ public class WebSocketServerHandler2 extends ChannelHandlerAdapter {
         }
     }
 
-    public static void show2(Integer i,String order,String port) throws Exception {
-        System.out.println("根据订单自动分配端口号");
-        //查询订单表未分拣完成的和未分配端口号
-        List<Orders> ordersList = SortingController.ordersService2.getOrders();
-        System.out.println("ordersList:" + ordersList);
-        if (ordersList.size() > 0) {
-            order = "";
-            for (Orders orders : ordersList) {
-                order += orders.getO_orderid() + ",";
-            }
-            System.out.println("order" + order);
-            if (order != "" || order != null) {
-                String[] splits = order.split(",");
-                for (int j = 0; j < splits.length; i++) {
-                    System.out.println("订单号" + splits[j]);
-                    if(splits[j].isEmpty()){
-                        System.out.println("订单为空");
-                        break;
-                    }
-                    System.out.println("端口号:" + port);
-                    //修改订单表,分配给订单端口号(重复)
-                    int updateOrdersByOidPort = SortingController.ordersService2.updateOrdersByOidPort(port, splits[j]);
-                    System.out.println("updateOrdersByOidPort:" + updateOrdersByOidPort);
-                    //修改这个端口的状态(重复)
-                    System.out.println("111");
-                    SortingController.porttableService2.updatePorttableByPort(port);
-                    //修改此订单端口分配状态(重复)
-                    System.out.println("2222");
-                    //客户ID
-                    System.out.println("订单ID:" + splits[j]);
-                    Orders ordersByOid = SortingController.ordersService2.getOrdersByOid(splits[j]);
-                    System.out.println("Cid:" + ordersByOid.getC_id());
-                    List<Orders> ordersByCid1 = SortingController.ordersService2.getOrdersByCid(ordersByOid.getC_id());
-                    System.out.println("ordersByCid1的个数1:" + ordersByCid1.size());
-                    int count = 0;
-                    for (Orders orders : ordersByCid1) {
-                        count++;
-                    }
-                    System.out.println("count:" + count);
-                    if (count == 0) {
-                        //客户的所有订单都分配到端口号,修改客户的端口分配状态
-                        System.out.println("修改的ID:" + ordersByOid.getC_id());
-                        int updateCustomerByCid = SortingController.customerService2.updateCustomerByCid(ordersByOid.getC_id());
-                        System.out.println("updateCustomerByCid:" + updateCustomerByCid);
-                    } else {
-                        System.out.println("进行下一轮端口分配");
-                    }
-                    break;
-                }
-            }
-        }
-    }
 
 
 }

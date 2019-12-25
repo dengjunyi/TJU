@@ -55,5 +55,11 @@ public interface OrdersMapper {
      */
     public int getOrdersByCids(@Param("c_id") Integer c_id) throws Exception;
 
+    /**
+     * 在页面中显示,双表查询
+     * @return
+     * @throws Exception
+     */
+    public List<Orders> getOrdersByCustomer() throws Exception;
 
 }

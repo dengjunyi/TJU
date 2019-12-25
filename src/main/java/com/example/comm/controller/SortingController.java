@@ -5,6 +5,7 @@ import com.example.comm.pojo.cursors.Cursors;
 
 
 import com.example.comm.pojo.ng.Ng;
+import com.example.comm.pojo.orders.Orders;
 import com.example.comm.service.Orders.OrdersService;
 import com.example.comm.service.barcode.BarcodeService;
 import com.example.comm.service.cursors.CursoursService;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * Create by self on 2019/11/28 14:28
@@ -36,13 +38,10 @@ public class SortingController {
 
     @Resource
     public SortingService sortingService;//获取资源
-
-
-
-
     @Resource
     private CursoursService cursoursService;//获取资源
-
+    @Resource
+    private OrdersService ordersService;//获取资源
     @Resource
     private NgService ngService;//获取资源
 
@@ -78,12 +77,26 @@ public class SortingController {
 
     @RequestMapping(value = "/ng", method = RequestMethod.POST)
     @ResponseBody
-    public Ng ng(Model model, @RequestParam("ng") String ng) throws Exception {
+    public Ng ng(@RequestParam("ng") String ng) throws Exception {
         System.out.println("进行AJAX");
         System.out.println("ng" + ng);
         Ng ng1 = ngService.getNg();
         System.out.println("时间" + ng1.getN_date());
         return ng1;
+    }
+
+    //在面界中显示出订单信息
+    @RequestMapping(value = "/getOrdersByCustomer", method = RequestMethod.POST)
+    @ResponseBody
+    public List<Orders> getOrdersByCustomer(Model model) throws Exception {
+        System.out.println("进行AJAX:订单信息");
+        List<Orders> ordersList=ordersService.getOrdersByCustomer();
+        for (Orders orders : ordersList) {
+            System.out.println("客户名称 :"+orders.getCustomer().getCustomer_name());
+            System.out.println("订单号 :"+orders.getO_orderid());
+            System.out.println("端口号 :"+orders.getO_port());
+        }
+        return ordersList;
     }
 
 

@@ -42,4 +42,9 @@ public class OrdersServiceImpl implements OrdersService {
     public int getOrdersByCids(Integer c_id) throws Exception {
         return ordersMapper.getOrdersByCids(c_id);
     }
+
+    @Override
+    public List<Orders> getOrdersByCustomer() throws Exception {
+        return ordersMapper.getOrdersByCustomer();
+    }
 }

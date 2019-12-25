@@ -37,5 +37,10 @@ public interface OrdersService {
      */
     public int getOrdersByCids(Integer c_id) throws Exception;
 
+    /**
+     * 在页面中显示,双表查询
+     */
+    public List<Orders> getOrdersByCustomer() throws Exception;
+
 
 }
