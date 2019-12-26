@@ -47,4 +47,9 @@ public class OrdersServiceImpl implements OrdersService {
     public List<Orders> getOrdersByCustomer() throws Exception {
         return ordersMapper.getOrdersByCustomer();
     }
+
+    @Override
+    public int getOrdersByOrderId(String o_orderid, String o_complete) throws Exception {
+        return ordersMapper.getOrdersByOrderId(o_orderid,o_complete);
+    }
 }

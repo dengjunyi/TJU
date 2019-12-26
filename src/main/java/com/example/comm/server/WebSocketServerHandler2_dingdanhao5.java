@@ -28,6 +28,7 @@ import java.util.List;
 
 import static java.lang.Integer.parseInt;
 
+//客户和订单自动分配,都是安照一个订单完成后,端口清空,分配下一个订单
 public class WebSocketServerHandler2_dingdanhao5 extends ChannelHandlerAdapter {
 
 

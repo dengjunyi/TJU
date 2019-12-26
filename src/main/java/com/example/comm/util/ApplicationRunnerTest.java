@@ -6,6 +6,7 @@ import com.example.comm.pojo.sorting.Sorting;
 import com.example.comm.server.WebSocketServer;
 import com.example.comm.server.WebSocketServer2;
 import com.example.comm.service.Orders.OrdersService;
+import com.example.comm.service.allocation.AllocationService;
 import com.example.comm.service.barcode.BarcodeService;
 import com.example.comm.service.cursors.CursoursService;
 import com.example.comm.service.customer.CustomerService;
@@ -40,8 +41,8 @@ public class ApplicationRunnerTest implements ApplicationRunner {
     private PorttableService porttableService;
     @Resource
     private SortingService sortingService;//获取资源
-
-
+    @Resource
+    private AllocationService allocationService;
 
 
 
@@ -54,7 +55,7 @@ public class ApplicationRunnerTest implements ApplicationRunner {
         SortingController.ordersService2 = ordersService;
         SortingController.porttableService2 = porttableService;
         SortingController.sortingService2 = sortingService;
-
+        SortingController.allocationService2 = allocationService;
 
         new Thread(new Runnable() {
             @Override

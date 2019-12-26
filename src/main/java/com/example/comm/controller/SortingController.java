@@ -1,12 +1,14 @@
 package com.example.comm.controller;
 
 
+import com.example.comm.pojo.allocation.Allocation;
 import com.example.comm.pojo.cursors.Cursors;
 
 
 import com.example.comm.pojo.ng.Ng;
 import com.example.comm.pojo.orders.Orders;
 import com.example.comm.service.Orders.OrdersService;
+import com.example.comm.service.allocation.AllocationService;
 import com.example.comm.service.barcode.BarcodeService;
 import com.example.comm.service.cursors.CursoursService;
 import com.example.comm.service.customer.CustomerService;
@@ -44,6 +46,8 @@ public class SortingController {
     private OrdersService ordersService;//获取资源
     @Resource
     private NgService ngService;//获取资源
+    @Resource
+    private AllocationService allocationService;//获取资源
 
 
 
@@ -54,6 +58,7 @@ public class SortingController {
     public static OrdersService ordersService2;
     public static PorttableService porttableService2;
     public static SortingService sortingService2;//获取资源
+    public static AllocationService allocationService2;
 
 
     @RequestMapping("/index")
@@ -88,7 +93,7 @@ public class SortingController {
     //在面界中显示出订单信息
     @RequestMapping(value = "/getOrdersByCustomer", method = RequestMethod.POST)
     @ResponseBody
-    public List<Orders> getOrdersByCustomer(Model model) throws Exception {
+    public List<Orders> getOrdersByCustomer() throws Exception {
         System.out.println("进行AJAX:订单信息");
         List<Orders> ordersList=ordersService.getOrdersByCustomer();
         for (Orders orders : ordersList) {
@@ -97,6 +102,28 @@ public class SortingController {
             System.out.println("端口号 :"+orders.getO_port());
         }
         return ordersList;
+    }
+
+    //在面界中显示出订单信息
+    @RequestMapping(value = "/getA_state", method = RequestMethod.POST)
+    @ResponseBody
+    public Integer getA_state() throws Exception {
+        System.out.println("进行AJAX:分配状态");
+        Allocation allocation = allocationService.getAllocation();
+        Integer a_state = allocation.getA_state();
+        System.out.println("状态:"+a_state);
+        return a_state;
+    }
+
+    //在面界中显示出订单信息
+    @RequestMapping(value = "/getOrdersByOrderId", method = RequestMethod.POST)
+    @ResponseBody
+    public Integer getOrdersByOrderId(@RequestParam("orderids") String orderids,@RequestParam("complete") String complete) throws Exception {
+        System.out.println("进行AJAX:获取此客户所有订单的数量");
+        System.out.println("订单ID:"+orderids);
+        System.out.println("未完成状态:"+complete);
+        int ordersByOrderId = ordersService.getOrdersByOrderId(orderids,complete);
+        return ordersByOrderId;
     }
 
 

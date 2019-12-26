@@ -62,4 +62,13 @@ public interface OrdersMapper {
      */
     public List<Orders> getOrdersByCustomer() throws Exception;
 
+    /**
+     * 根据客户名字获取客户ID
+     * @param o_orderid
+     * @param o_complete
+     * @return
+     * @throws Exception
+     */
+    public int getOrdersByOrderId(@Param("o_orderid") String o_orderid,@Param("o_complete")String o_complete) throws Exception;
+
 }

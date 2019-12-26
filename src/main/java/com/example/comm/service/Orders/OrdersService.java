@@ -42,5 +42,10 @@ public interface OrdersService {
      */
     public List<Orders> getOrdersByCustomer() throws Exception;
 
+    /**
+     * 根据客户名字获取客户ID
+     */
+    public int getOrdersByOrderId(String o_orderid,String o_complete) throws Exception;
+
 
 }

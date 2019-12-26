@@ -38,6 +38,10 @@
     <select id="getOrdersByCustomer" resultMap="ordersBY">
         SELECT * FROM orders o INNER JOIN customer c ON c.c_id=o.c_id WHERE IFNULL(o.o_port,'')!='' ORDER BY o.c_id
     </select>
+    <select id="getOrdersByOrderId" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM orders WHERE c_id=(SELECT c_id FROM orders WHERE o_orderid=#{o_orderid})
+        <if test="o_complete!=null and o_complete!=''">AND o_complete=1</if>
+    </select>
 
 
 </mapper>

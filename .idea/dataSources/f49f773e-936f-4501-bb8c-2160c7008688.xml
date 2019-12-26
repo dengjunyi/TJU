@@ -812,53 +812,73 @@
       <Charset>utf8mb4</Charset>
       <DefaultForCharset>0</DefaultForCharset>
     </collation>
-    <table id="204" parent="2" name="barcode"/>
-    <table id="205" parent="2" name="cursors"/>
-    <table id="206" parent="2" name="customer"/>
-    <table id="207" parent="2" name="ng"/>
-    <table id="208" parent="2" name="orders"/>
-    <table id="209" parent="2" name="porttable"/>
-    <table id="210" parent="2" name="sorting"/>
-    <column id="211" parent="204" name="id">
+    <table id="204" parent="2" name="allocation"/>
+    <table id="205" parent="2" name="barcode"/>
+    <table id="206" parent="2" name="cursors"/>
+    <table id="207" parent="2" name="customer"/>
+    <table id="208" parent="2" name="ng"/>
+    <table id="209" parent="2" name="orders"/>
+    <table id="210" parent="2" name="porttable"/>
+    <table id="211" parent="2" name="sorting"/>
+    <column id="212" parent="204" name="a_id">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="212" parent="204" name="b_number">
+    <column id="213" parent="204" name="a_state">
+      <Position>2</Position>
+      <Comment>分配状态:(0:未分配 1:客户 2.订单)</Comment>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <key id="214" parent="204" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>a_id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="215" parent="205" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="216" parent="205" name="b_number">
       <Position>2</Position>
       <Comment>数量</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="213" parent="204" name="b_Item_info">
+    <column id="217" parent="205" name="b_Item_info">
       <Position>3</Position>
       <Comment>物品描述</Comment>
       <DataType>varchar(255)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="214" parent="204" name="b_barcode">
+    <column id="218" parent="205" name="b_barcode">
       <Position>4</Position>
       <Comment>品类条码</Comment>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="215" parent="204" name="o_id">
+    <column id="219" parent="205" name="o_id">
       <Position>5</Position>
       <Comment>所对应的订单ID</Comment>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="216" parent="204" name="PRIMARY">
+    <key id="220" parent="205" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="217" parent="205" name="id">
+    <column id="221" parent="206" name="id">
       <Position>1</Position>
       <Comment>自增</Comment>
       <DataType>int(11)|0s</DataType>
@@ -866,74 +886,74 @@
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="218" parent="205" name="c_order">
+    <column id="222" parent="206" name="c_order">
       <Position>2</Position>
       <Comment>订单号</Comment>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="219" parent="205" name="c_barcode">
+    <column id="223" parent="206" name="c_barcode">
       <Position>3</Position>
       <Comment>条码</Comment>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="220" parent="205" name="c_out">
+    <column id="224" parent="206" name="c_out">
       <Position>4</Position>
       <Comment>指令</Comment>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="221" parent="205" name="c_count">
+    <column id="225" parent="206" name="c_count">
       <Position>5</Position>
       <Comment>物品数量</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="222" parent="205" name="c_specification">
+    <column id="226" parent="206" name="c_specification">
       <Position>6</Position>
       <Comment>规格(型号)</Comment>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="223" parent="205" name="c_Item_info">
+    <column id="227" parent="206" name="c_Item_info">
       <Position>7</Position>
       <Comment>描述</Comment>
       <DataType>varchar(255)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="224" parent="205" name="c_time">
+    <column id="228" parent="206" name="c_time">
       <Position>8</Position>
       <Comment>日期</Comment>
       <DataType>datetime|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="225" parent="205" name="c_customername">
+    <column id="229" parent="206" name="c_customername">
       <Position>9</Position>
       <Comment>客户名称</Comment>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="226" parent="205" name="c_number">
+    <column id="230" parent="206" name="c_number">
       <Position>10</Position>
       <Comment>已分拣数量</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="227" parent="205" name="PRIMARY">
+    <key id="231" parent="206" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="228" parent="206" name="c_id">
+    <column id="232" parent="207" name="c_id">
       <Position>1</Position>
       <Comment>id</Comment>
       <DataType>int(11)|0s</DataType>
@@ -941,14 +961,14 @@
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="229" parent="206" name="customer_name">
+    <column id="233" parent="207" name="customer_name">
       <Position>2</Position>
       <Comment>客户名称</Comment>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="230" parent="206" name="c_complete">
+    <column id="234" parent="207" name="c_complete">
       <Position>3</Position>
       <Comment>分拣状态</Comment>
       <DataType>int(11)|0s</DataType>
@@ -956,7 +976,7 @@
       <DefaultExpression>0</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="231" parent="206" name="c_state">
+    <column id="235" parent="207" name="c_state">
       <Position>4</Position>
       <Comment>此客户的所有订单有没有分配端口的状态</Comment>
       <DataType>int(11)|0s</DataType>
@@ -964,12 +984,12 @@
       <DefaultExpression>0</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="232" parent="206" name="PRIMARY">
+    <key id="236" parent="207" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>c_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="233" parent="207" name="n_id">
+    <column id="237" parent="208" name="n_id">
       <Position>1</Position>
       <Comment>id</Comment>
       <DataType>int(11)|0s</DataType>
@@ -977,32 +997,32 @@
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="234" parent="207" name="n_barcode">
+    <column id="238" parent="208" name="n_barcode">
       <Position>2</Position>
       <Comment>条形码</Comment>
       <DataType>varchar(255)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="235" parent="207" name="n_date">
+    <column id="239" parent="208" name="n_date">
       <Position>3</Position>
       <Comment>时间</Comment>
       <DataType>datetime|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="236" parent="207" name="n_number">
+    <column id="240" parent="208" name="n_number">
       <Position>4</Position>
       <Comment>数量</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="237" parent="207" name="PRIMARY">
+    <key id="241" parent="208" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>n_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="238" parent="208" name="id">
+    <column id="242" parent="209" name="id">
       <Position>1</Position>
       <Comment>订单ID</Comment>
       <DataType>int(11)|0s</DataType>
@@ -1010,60 +1030,60 @@
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="239" parent="208" name="o_orderid">
+    <column id="243" parent="209" name="o_orderid">
       <Position>2</Position>
       <Comment>订单号</Comment>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="240" parent="208" name="o_category">
+    <column id="244" parent="209" name="o_category">
       <Position>3</Position>
       <Comment>品类(物品的名称)</Comment>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="241" parent="208" name="o_Specifications">
+    <column id="245" parent="209" name="o_Specifications">
       <Position>4</Position>
       <Comment>规格(物品的大小号或尺码)</Comment>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="242" parent="208" name="o_number">
+    <column id="246" parent="209" name="o_number">
       <Position>5</Position>
       <Comment>订单的所有货物的总数量</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="243" parent="208" name="o_complete">
+    <column id="247" parent="209" name="o_complete">
       <Position>6</Position>
       <Comment>是否分拣完成</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="244" parent="208" name="c_id">
+    <column id="248" parent="209" name="c_id">
       <Position>7</Position>
       <Comment>客户对应的id</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="245" parent="208" name="o_port">
+    <column id="249" parent="209" name="o_port">
       <Position>8</Position>
       <Comment>分配的端口号</Comment>
       <DataType>varchar(255)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="246" parent="208" name="PRIMARY">
+    <key id="250" parent="209" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="247" parent="209" name="p_id">
+    <column id="251" parent="210" name="p_id">
       <Position>1</Position>
       <Comment>id</Comment>
       <DataType>int(11)|0s</DataType>
@@ -1071,26 +1091,26 @@
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="248" parent="209" name="p_port">
+    <column id="252" parent="210" name="p_port">
       <Position>2</Position>
       <Comment>端口号</Comment>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="249" parent="209" name="p_state">
+    <column id="253" parent="210" name="p_state">
       <Position>3</Position>
       <Comment>状态(0:未分配 1:已分配)</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="250" parent="209" name="PRIMARY">
+    <key id="254" parent="210" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>p_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="251" parent="210" name="s_id">
+    <column id="255" parent="211" name="s_id">
       <Position>1</Position>
       <Comment>序列</Comment>
       <DataType>int(11)|0s</DataType>
@@ -1098,62 +1118,62 @@
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="252" parent="210" name="s_orderid">
+    <column id="256" parent="211" name="s_orderid">
       <Position>2</Position>
       <Comment>订单号(出单号)</Comment>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="253" parent="210" name="s_category">
+    <column id="257" parent="211" name="s_category">
       <Position>3</Position>
       <Comment>品类</Comment>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="254" parent="210" name="s_Item_info">
+    <column id="258" parent="211" name="s_Item_info">
       <Position>4</Position>
       <Comment>物类描述</Comment>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="255" parent="210" name="s_count">
+    <column id="259" parent="211" name="s_count">
       <Position>5</Position>
       <Comment>数量</Comment>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="256" parent="210" name="s_barcode">
+    <column id="260" parent="211" name="s_barcode">
       <Position>6</Position>
       <Comment>条形码</Comment>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="257" parent="210" name="customer_name">
+    <column id="261" parent="211" name="customer_name">
       <Position>7</Position>
       <Comment>客户</Comment>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="258" parent="210" name="s_number">
+    <column id="262" parent="211" name="s_number">
       <Position>8</Position>
       <Comment>分拣</Comment>
       <DataType>bigint(20)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="259" parent="210" name="order_time">
+    <column id="263" parent="211" name="order_time">
       <Position>9</Position>
       <Comment>时间</Comment>
       <DataType>datetime|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="260" parent="210" name="PRIMARY">
+    <key id="264" parent="211" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>s_id</ColNames>
       <Primary>1</Primary>

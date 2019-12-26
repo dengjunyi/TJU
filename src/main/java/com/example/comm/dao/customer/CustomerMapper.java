@@ -39,4 +39,6 @@ public interface CustomerMapper {
      */
     public int updateCustomerByCids(@Param("c_id") Integer c_id) throws Exception;
 
+
+
 }
