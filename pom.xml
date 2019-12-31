@@ -171,6 +171,12 @@
             <artifactId>lombok</artifactId>
             <version>1.16.18</version>
         </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+            <scope>test</scope>
+        </dependency>
         <!-- &lt;!&ndash;实体类生成get和set的依赖&ndash;&gt;
          <dependency>
              <groupId>org.projectlombok</groupId>

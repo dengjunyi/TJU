@@ -16,6 +16,7 @@ public class Sorting {
     private String s_category;
     private String s_Item_info;
     private long s_count;
+    private Double s_weight;
     private String s_barcode;
     private String customer_name;
     private long s_number;
@@ -30,10 +31,11 @@ public class Sorting {
                 ", s_category='" + s_category + '\'' +
                 ", s_Item_info='" + s_Item_info + '\'' +
                 ", s_count=" + s_count +
+                ", s_weight=" + s_weight +
                 ", s_barcode='" + s_barcode + '\'' +
                 ", customer_name='" + customer_name + '\'' +
                 ", s_number=" + s_number +
-                ", order_time=" + order_time +
+                ", order_time='" + order_time + '\'' +
                 '}';
     }
 }

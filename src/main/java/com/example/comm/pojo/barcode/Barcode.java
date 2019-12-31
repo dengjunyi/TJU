@@ -8,9 +8,9 @@ public class Barcode {
     private Integer id;
     private Integer b_number;
     private String b_Item_info;
+    private Double b_weight;
     private String b_barcode;
     private String o_id;
-
 
 
     @Override
@@ -19,6 +19,7 @@ public class Barcode {
                 "id=" + id +
                 ", b_number=" + b_number +
                 ", b_Item_info='" + b_Item_info + '\'' +
+                ", b_weight=" + b_weight +
                 ", b_barcode='" + b_barcode + '\'' +
                 ", o_id='" + o_id + '\'' +
                 '}';

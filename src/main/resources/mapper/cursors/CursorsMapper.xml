@@ -16,5 +16,8 @@
     <select id="getCursorsBybarcode" resultType="com.example.comm.pojo.cursors.Cursors">
         select * from cursors where c_order=#{c_order}
     </select>
+    <select id="getCursors" resultType="com.example.comm.pojo.cursors.Cursors">
+        select * from cursors
+    </select>
 
 </mapper>

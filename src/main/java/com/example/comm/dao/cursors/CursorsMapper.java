@@ -3,6 +3,8 @@ package com.example.comm.dao.cursors;
 import com.example.comm.pojo.cursors.Cursors;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface CursorsMapper {
 
     /**
@@ -28,5 +30,12 @@ public interface CursorsMapper {
      * @throws Exception
      */
     public int addCursors(Cursors cursors) throws Exception;
+
+    /**
+     * 查询所有临时表的信息
+     * @return
+     * @throws Exception
+     */
+    public List<Cursors> getCursors() throws Exception;
 
 }

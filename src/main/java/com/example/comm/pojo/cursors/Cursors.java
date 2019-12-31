@@ -17,6 +17,7 @@ public class Cursors {
   private Integer c_count;
   private String c_specification;
   private String c_Item_info;
+  private Double c_weight;
   @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
   private Date c_time;
   private String c_customername;
@@ -32,7 +33,8 @@ public class Cursors {
             ", c_count=" + c_count +
             ", c_specification='" + c_specification + '\'' +
             ", c_Item_info='" + c_Item_info + '\'' +
-            ", c_time='" + c_time + '\'' +
+            ", c_weight=" + c_weight +
+            ", c_time=" + c_time +
             ", c_customername='" + c_customername + '\'' +
             ", c_number=" + c_number +
             '}';

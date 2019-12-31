@@ -29,6 +29,11 @@ public interface CursoursService {
      */
     public int addCursors(Cursors cursors) throws Exception;
 
+    /**
+     * 查询所有临时表的信息
+     */
+    public List<Cursors> getCursors() throws Exception;
+
 
 
 }

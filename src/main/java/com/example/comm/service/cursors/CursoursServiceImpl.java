@@ -28,4 +28,9 @@ public class CursoursServiceImpl implements CursoursService {
     public int addCursors(Cursors cursors) throws Exception {
         return cursorsMapper.addCursors(cursors);
     }
+
+    @Override
+    public List<Cursors> getCursors() throws Exception {
+        return cursorsMapper.getCursors();
+    }
 }

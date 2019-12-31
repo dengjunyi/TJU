@@ -67,6 +67,14 @@ public class SortingController {
         return "index";
     }
 
+    @RequestMapping(value = "/getCursors", method = RequestMethod.POST)
+    @ResponseBody
+    public List<Cursors> getCursors() throws Exception {
+        System.out.println("进行AJAX");
+        List<Cursors> cursors = cursoursService.getCursors();
+        return cursors;
+    }
+
 
     @RequestMapping(value = "/data", method = RequestMethod.POST)
     @ResponseBody

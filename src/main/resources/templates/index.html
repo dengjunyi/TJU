@@ -24,15 +24,64 @@
                 // document.getElementById("contentDiv").innerHTML += "<p>已经和服务器断开连接。</p>";
             }
 
+            $(document).ready(function () {
+
+                if (location.href.indexOf("#reloaded") == -1) {
+                    location.href = location.href + "#reloaded";
+                    // location.reload();
+                }
+            })
+
+            $.post("/sorting/getCursors", {}, function (data) {
+                var str = "";
+                //alert("最外层!")
+                for (var i = 0; i < data.length; i++) {
+                    var complete = "";
+                    $.ajaxSettings.async = false;
+                    var sum;
+                    var sums;
+                    $.post("/sorting/getOrdersByOrderId", {
+                        orderids: data[i].c_order,
+                        complete: complete
+                    }, function (data1) {
+                        sum = data1;
+                    }, "json");
+                    $.post("/sorting/getOrdersByOrderId", {orderids: data[i].c_order, complete: 1}, function (data2) {
+                        sums = data2;
+                    }, "json");
+                    var state;
+                    $.post("/sorting/getA_state", {}, function (states) {
+                        state = states;
+                    }, "json")
+                    $.ajaxSettings.async = true;
+                    var css;
+                    if (sum == sums) {
+                        css = "background-color:#faf24a";
+                    }
+                    str += "<tr style='" + css + ";text-align: center'><td id=" + data[i].c_customername + ">" + data[i].c_customername + "</td><td id=" + +data[i].c_order + ">" + data[i].c_order + "</td><td>" + sum + "</td><td>" + sums + "</td><td>" + data[i].c_barcode + "</td><td>" + data[i].c_out + "</td><td>" + data[i].c_count + "</td><td>" + data[i].c_specification + "</td><td>" + data[i].c_Item_info + "</td><td>" + data[i].c_weight + "</td><td class='text-align:center;'>" + data[i].c_time + "</td><td>" + data[i].c_number + "</td></tr>";
+                    css = "";
+                }
+                $("#tbody").append(str);
+                $("body [id]").each(function () {
+                    var ids = $(this).attr("id");
+                    if ($("body [id=" + ids + "]").length >= 2) {
+                        if (Number(state) == 1) {
+                            $("#" + ids + ":not(:first)").parent().hide();
+                        }
+                        //alert("id为"+ids+" 的重复了。");
+                    }
+                });
+            }, "json")
+
+
             $("#msg").focus(function () {
                 this.select();
             });
             $("#myTable").hide();
-            getOrdersByCustomer();
+
 
             $("#sendBut").click(function () {
                 $.post("/sorting/getA_state", {}, function (state) {
-                    //alert(Number(state));
                     if (Number(state) > 0) {
                         alert("已进行分配!");
                         $("#sendBut").attr("disabled", true);
@@ -41,26 +90,10 @@
                         $("#sendBut").attr("disabled", true);
                         alert(sex);
                         webSocket.send(sex);
-                        getOrdersByCustomer();
                     }
                 }, "json")
             })
 
-            function getOrdersByCustomer() {
-                $.post("/sorting/getOrdersByCustomer", {}, function (data) {
-                    if (null != data && "" != data) {
-                        //alert("json不为空");
-                        var str = "";
-                        for (var i = 0; i < data.length; i++) {
-                            str += "<tr style='text-align: center'><td>" + data[i].customer.customer_name + "</td><td>" + data[i].o_orderid + "</td><td>" + data[i].o_port + "</td></tr>";
-                        }
-                        $("#myTable").show();
-                        $("#tbody_orders").html(str);
-                    } else {
-                        //alert("json为空");
-                    }
-                }, "json")
-            }
 
             webSocket.onmessage = function (obj) {	// 进行消息回应
                 $("#msg").val("").focus();
@@ -72,56 +105,72 @@
                         str = "<tr><td COLSPAN='10'>NG</td></tr><tr><td id=" + data.n_barcode + ">条形码:" + data.n_barcode + "</td><td>时间:" + data.n_date + "</td><td>数量:" + data.n_number + "</td></tr>";
                         $("#tbody_ng").html(str);
                     }, "json")
+                } else if (obj.data == "ununited") {
+                    alert("机器未连接客户端!")
                 } else {
-                    var complete="";
-                    alert("订单号:"+obj.data);
+                    var complete = "";
+                    //alert("订单号:" + obj.data);
                     $.ajaxSettings.async = false;
                     var sum;
                     var sums;
-                    $.post("/sorting/getOrdersByOrderId",{orderids: obj.data,complete: complete},function (data1) {
-                        alert("data1"+data1);
-                        sum=data1;
+                    $.post("/sorting/getOrdersByOrderId", {orderids: obj.data, complete: complete}, function (data1) {
+                        sum = data1;
                     }, "json");
-                    $.post("/sorting/getOrdersByOrderId",{orderids: obj.data,complete: 1},function (data2) {
-                        alert("data2"+data2);
-                        sums=data2;
+                    $.post("/sorting/getOrdersByOrderId", {orderids: obj.data, complete: 1}, function (data2) {
+                        sums = data2;
                     }, "json");
-                    alert("sum:"+sum);
-                    alert("sums:"+sums);
+                    var state;
+                    $.post("/sorting/getA_state", {}, function (states) {
+                        state = states;
+                    }, "json")
+                    //alert("state:" + state);
                     $.ajaxSettings.async = true;
                     $.post("/sorting/data", {order: obj.data}, function (data) {
                         //订单号
                         var c_order = $("#" + data.c_order).text();
+                        var c_customername = $("#" + data.c_customername).html();
                         var count = data.c_count;
                         var number = data.c_number;
-                        if (count <= number) {
-                            $("#" + obj.data).parent().css("background-color", "#faf24a");
-                        }
-                        if (count == 1) {
-                            var css = ("background-color:#faf24a");
-                        }
                         //alert("获取到的订单号:"+c_order);
                         //alert("传值的订单号:"+order);
-                        if (Number(c_order) == Number(obj.data)) {
-                            // alert("已有这行数据");
-                            str = "<td id='c_customername'>" + data.c_customername + "</td><td id=" + data.c_order + "> " + data.c_order + "</td><td>" + sum + "</td><td id='sums'>" + sums + "</td><td id=" + data.c_barcode + ">" + data.c_barcode + "</td><td>" + data.c_out + "</td><td>" + data.c_count + "</td><td>" + data.c_specification + "</td><td>" + data.c_Item_info + "</td><td class='text-align:center;'>" + data.c_time + "</td><td>" + data.c_number + "</td>";
-                            $("#" + obj.data).parent().html(str);
-                            if(Number(sums)>0){
-                             var c_customername= $("#c_customername").text();
-                                $("#c_customername").each(function(){
-                                    alert("客户名称:"+$("#c_customername").text());
-                                })
-                            };
-
-                        } else {
-                            str += "<tr style='" + css + ";text-align: center'><td>" + data.c_customername + "</td><td id=" + data.c_order + ">" + data.c_order + "</td><td>" + sum + "</td><td>" + sums + "</td><td id=" + data.c_barcode + ">" + data.c_barcode + "</td><td>" + data.c_out + "</td><td>" + data.c_count + "</td><td>" + data.c_specification + "</td><td>" + data.c_Item_info + "</td><td class='text-align:center;'>" + data.c_time + "</td><td>" + data.c_number + "</td></tr>";
-                            $("#tbody").append(str);
+                        //订单显示
+                        if (Number(state) == 2) {
+                            //alert("订单分拣");
+                            if (count == number) {
+                                $("#" + obj.data).parent().css("background-color", "#faf24a");
+                            }
+                            if (Number(c_order) == Number(obj.data)) {
+                                //alert("已有这行数据");
+                                str = "<td >" + data.c_customername + "</td><td id=" + data.c_order + "> " + data.c_order + "</td><td>" + sum + "</td><td>" + sums + "</td><td id=" + data.c_barcode + ">" + data.c_barcode + "</td><td>" + data.c_out + "</td><td>" + data.c_count + "</td><td>" + data.c_specification + "</td><td>" + data.c_Item_info + "</td><td>" + data.c_weight + "</td><td class='text-align:center;'>" + data.c_time + "</td><td>" + data.c_number + "</td>";
+                                $("#" + obj.data).parent().html(str);
+                            } else {
+                                str += "<tr style='text-align: center'><td>" + data.c_customername + "</td><td id=" + data.c_order + ">" + data.c_order + "</td><td>" + sum + "</td><td>" + sums + "</td><td id=" + data.c_barcode + ">" + data.c_barcode + "</td><td>" + data.c_out + "</td><td>" + data.c_count + "</td><td>" + data.c_specification + "</td><td>" + data.c_Item_info + "</td><td>" + data.c_weight + "</td><td class='text-align:center;'>" + data.c_time + "</td><td>" + data.c_number + "</td></tr>";
+                                $("#tbody").append(str);
+                            }
                         }
+                        //客户显示
+                        if (Number(state) == 1) {
+                            alert("进入客户");
+                            alert("ID1:" + c_customername);
+                            alert("ID2:" + data.c_customername);
+                            if (c_customername == data.c_customername) {
+                                if (Number(sums) == Number(sum)) {
+                                    $("#" + data.c_customername).parent().css("background-color", "#faf24a");
+                                }
+                                alert("已有这行数据");
+                                //alert("订单号:"+data.c_order)
+                                str = "<td id=" + data.c_customername + ">" + data.c_customername + "</td><td id=" + data.c_order + "> " + data.c_order + "</td><td>" + sum + "</td><td>" + sums + "</td><td id=" + data.c_barcode + ">" + data.c_barcode + "</td><td>" + data.c_out + "</td><td>" + data.c_count + "</td><td>" + data.c_specification + "</td><td>" + data.c_Item_info + "</td><td>" + data.c_weight + "</td><td class='text-align:center;'>" + data.c_time + "</td><td>" + data.c_number + "</td>";
+                                $("#" + data.c_customername).parent().html(str);
+                            } else {
+                                str += "<tr style='text-align: center'><td id=" + data.c_customername + ">" + data.c_customername + "</td><td id=" + data.c_order + ">" + data.c_order + "</td><td>" + sum + "</td><td>" + sums + "</td><td id=" + data.c_barcode + ">" + data.c_barcode + "</td><td>" + data.c_out + "</td><td>" + data.c_count + "</td><td>" + data.c_specification + "</td><td>" + data.c_Item_info + "</td><td>" + data.c_weight + "</td><td class='text-align:center;'>" + data.c_time + "</td><td>" + data.c_number + "</td></tr>";
+                                $("#tbody").append(str);
+                            }
+                        }
+
                     }, "json")
                 }
 
             }
-
 
             var code = "";
             var lastTime, nextTime;
@@ -148,6 +197,8 @@
                     code = "";
                 }
             }
+
+
         }
     </script>
     <style>
@@ -159,11 +210,8 @@
 <body ondragstart="window.event.returnValue=false" oncontextmenu="window.event.returnValue=false"
       onselectstart="event.returnValue=false">
 <!--按纽作为addon-->
-<div class="input-group" style="width: 20%;text-align: center;margin:20px auto">
+<div>
     <input type="hidden" name="msg" id="msg" class="form-control" placeholder="请输入条形码信息">
-    <!-- <span class="input-group-btn ">
-                 <button class="btn btn-primary" type="button" id="sendBut">查询</button>
-     </span>-->
 </div>
 <div style="text-align: center;padding-top: 20px;">
     <h2>分拣系统</h2>
@@ -171,34 +219,26 @@
 <div class="body-section" style="margin-top: 40px">
     <section class="row">
         <div class="col-md-2" style="margin-left: 40px">
-            <table width="250" cellspacing="0" cellpadding="0" align="center" border="1" id="myTable">
-                <tr style="text-align: center">
-                    <td>客户名称</td>
-                    <td>订单号</td>
-                    <td>端口号</td>
-                </tr>
-                <tbody id="tbody_orders" style="">
-                </tbody>
-            </table>
         </div>
         <div class="col-md-8">
-             <table class="table text-center table-hover data">
-                 <tr class="jz">
-                     <th class="jz">客户名称</th>
-                     <th class="jz">订单号</th>
-                     <th class="jz">订单总数量</th>
-                     <th class="jz">订单已分拣数量</th>
-                     <th class="jz">条码</th>
-                     <th class="jz">OUT</th>
-                     <th class="jz">物品总数量</th>
-                     <th class="jz">规格</th>
-                     <th class="jz">描述</th>
-                     <th class="jz">日期</th>
-                     <th class="jz">已分拣物品数量</th>
-                 </tr>
-                 <tbody id="tbody">
-                 </tbody>
-             </table>
+            <table class="table text-center table-hover data">
+                <tr class="jz">
+                    <th class="jz">客户名称</th>
+                    <th class="jz">订单号</th>
+                    <th class="jz">订单数</th>
+                    <th class="jz">订单已分拣数</th>
+                    <th class="jz">条码</th>
+                    <th class="jz">OUT</th>
+                    <th class="jz">物品总数量</th>
+                    <th class="jz">规格</th>
+                    <th class="jz">描述</th>
+                    <th class="jz">重量</th>
+                    <th class="jz">日期</th>
+                    <th class="jz">已分拣物品数量</th>
+                </tr>
+                <tbody id="tbody">
+                </tbody>
+            </table>
             <table class="table text-center table-hover data jz" style="margin-top:200px;">
                 <tbody id="tbody_ng" class="jz">
                 </tbody>
@@ -213,7 +253,5 @@
         </div>
     </section>
 </div>
-<span></span>
-　<!--<input type="barcode" name="barcode"  />-->
 </body>
 </html>
