@@ -32,4 +32,19 @@ public class PorttableServiceImpl implements PorttableService {
     public int updatePorttableByPort(String p_port) throws Exception {
         return porttableMapper.updatePorttableByPort(p_port);
     }
+
+    @Override
+    public List<Porttable> getPorttableList() throws Exception {
+        return porttableMapper.getPorttableList();
+    }
+
+    @Override
+    public int addPort(String p_port) throws Exception {
+        return porttableMapper.addPort(p_port);
+    }
+
+    @Override
+    public int delPort(Integer p_id) throws Exception {
+        return porttableMapper.delPort(p_id);
+    }
 }

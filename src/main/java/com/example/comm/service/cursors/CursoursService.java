@@ -34,6 +34,9 @@ public interface CursoursService {
      */
     public List<Cursors> getCursors() throws Exception;
 
-
+    /**
+     * 修改显示状态
+     */
+    public int updateCursorsBydisplayStatus(String c_out) throws Exception;
 
 }

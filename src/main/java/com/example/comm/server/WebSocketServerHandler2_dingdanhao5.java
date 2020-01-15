@@ -149,7 +149,8 @@ public class WebSocketServerHandler2_dingdanhao5 extends ChannelHandlerAdapter {
             System.out.println(!inputStr.equals("customer") && !inputStr.equals("barcode"));
             if (!inputStr.equals("customer") && !inputStr.equals("barcode")) {
                 //条形码进行对比
-                List<Barcode> barcodeByBarcodeList = SortingController.barcodeService2.getBarcodeByBarcode(inputStr);
+                String o_id = null;
+                List<Barcode> barcodeByBarcodeList = SortingController.barcodeService2.getBarcodeByBarcode(o_id,inputStr);
                 System.out.println("条码对象的个数:" + barcodeByBarcodeList.size());
                 if (barcodeByBarcodeList.size() > 0) {
                     for (Barcode barcode : barcodeByBarcodeList) {
@@ -185,7 +186,7 @@ public class WebSocketServerHandler2_dingdanhao5 extends ChannelHandlerAdapter {
                                     System.out.println("修改详细表");
                                     Sorting sorting = new Sorting();
                                     sorting.setS_number(sortingByOidByBarcode.getS_number() + 1);
-                                    sorting.setOrder_time(sdf.format(d));
+                                    sorting.setOrder_time(d);
                                     sorting.setS_orderid(split[i]);
                                     sorting.setS_barcode(inputStr);
                                     int updateSorting = SortingController.sortingService2.updateSorting(sorting);
@@ -289,9 +290,9 @@ public class WebSocketServerHandler2_dingdanhao5 extends ChannelHandlerAdapter {
                         ng1.setN_barcode(inputStr);
                         ng1.setN_date(d);
                         if (ng != null) {
-                            ng1.setN_number(ng.getN_id() + 1);
+                            ng1.setN_id(ng.getN_id() + 1);
                         } else {
-                            ng1.setN_number(1);
+                            ng1.setN_id(1);
                         }
                         int addNg = SortingController.ngService2.addNg(ng1);
                         System.out.println("添加到ng表:" + addNg);

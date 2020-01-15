@@ -1,7 +1,11 @@
 package com.example.comm.pojo.customer;
 
 
+
+import com.example.comm.pojo.orders.Orders;
 import lombok.Data;
+
+
 
 @Data
 public class Customer {
@@ -10,6 +14,7 @@ public class Customer {
     private String customer_name;
     private Integer c_complete;
     private Integer c_state;
+    private Orders orders;
 
     @Override
     public String toString() {

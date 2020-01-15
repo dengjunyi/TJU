@@ -27,4 +27,12 @@ public interface CustomerService {
      */
     public int updateCustomerByCids(Integer c_id) throws Exception;
 
+    /**
+     * 通过端口获取客户名称
+     */
+    public List<Customer> getCustomerByPort(@Param("o_port") String o_port) throws Exception;
+
+    //跟根客户名称查询
+    public Customer getCustomerByName(String customer_name) throws Exception;
+
 }

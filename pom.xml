@@ -117,12 +117,6 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- <dependency>
-             <groupId>org.testng</groupId>
-             <artifactId>testng</artifactId>
-             <version>7.0.0-beta4</version>
-             <scope>compile</scope>
-         </dependency>-->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
@@ -177,15 +171,8 @@
             <version>4.0.1</version>
             <scope>test</scope>
         </dependency>
-        <!-- &lt;!&ndash;实体类生成get和set的依赖&ndash;&gt;
-         <dependency>
-             <groupId>org.projectlombok</groupId>
-             <artifactId>lombok</artifactId>
-             <version>1.18.8</version>
-             <scope>provided</scope>
-         </dependency>-->
-
     </dependencies>
+
 
     <build>
         <plugins>

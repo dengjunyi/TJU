@@ -5,9 +5,10 @@ import com.example.comm.pojo.ng.Ng;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
-public class NgServiceImpl implements NgService{
+public class NgServiceImpl implements NgService {
 
     @Resource
     private NgMapper ngMapper;
@@ -20,5 +21,10 @@ public class NgServiceImpl implements NgService{
     @Override
     public int addNg(Ng ng) throws Exception {
         return ngMapper.addNg(ng);
+    }
+
+    @Override
+    public List<Ng> getNgList() throws Exception {
+        return ngMapper.getNgList();
     }
 }

@@ -9,6 +9,26 @@
     <select id="getCustomerByCid" resultType="com.example.comm.pojo.customer.Customer">
         SELECT * FROM customer WHERE c_id=#{c_id}
     </select>
+
+    <resultMap type="com.example.comm.pojo.customer.Customer" id="customerBY">
+        <id property="c_id" column="c_id"/>
+        <result property="customer_name" column="customer_name"/>
+        <result property="c_complete" column="c_complete"/>
+        <result property="c_state" column="c_state"/>
+        <association javaType="com.example.comm.pojo.orders.Orders" property="orders">
+            <id property="id" column="id"/>
+            <result property="o_orderid" column="o_orderid"/>
+            <result property="o_complete" column="o_complete"/>
+            <result property="c_id" column="c_id"/>
+            <result property="o_port" column="o_port"/>
+        </association>
+    </resultMap>
+    <select id="getCustomerByPort" resultMap="customerBY">
+        SELECT * FROM customer WHERE c_id IN (SELECT c_id FROM orders WHERE o_port =#{o_port})
+    </select>
+    <select id="getCustomerByName" resultType="com.example.comm.pojo.customer.Customer">
+            SELECT * FROM customer WHERE customer_name=#{customer_name}
+    </select>
     <update id="updateCustomerByCid">
         UPDATE customer SET c_state=1 WHERE c_id=#{c_id}
     </update>

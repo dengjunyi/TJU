@@ -1,11 +1,17 @@
 package com.example.comm.service.Orders;
 
+import com.example.comm.pojo.customer.Customer;
 import com.example.comm.pojo.orders.Orders;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 public interface OrdersService {
+
+    /**
+     * 显示所有订单表的数据
+     */
+    public List<Orders> getOrdersList(String c_id,String o_orderid) throws Exception;
 
     /**
      * 查询此客户的订单里未分拣完成的订单
@@ -28,6 +34,14 @@ public interface OrdersService {
     public Orders getOrdersByOid(String o_orderid) throws Exception;
 
     /**
+     * 通过订单号来查询订单信息端口号不为空
+     * @param o_orderid
+     * @return
+     * @throws Exception
+     */
+    public Orders getOrdersByOids(@Param("o_orderid") String o_orderid) throws Exception;
+
+    /**
      * 修改订单号分配完成
      */
     public int updateOrdersByOid(String o_orderid) throws Exception;
@@ -46,6 +60,7 @@ public interface OrdersService {
      * 根据客户名字获取客户ID
      */
     public int getOrdersByOrderId(String o_orderid,String o_complete) throws Exception;
+
 
 
 }

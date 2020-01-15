@@ -1,6 +1,7 @@
 package com.example.comm.dao.customer;
 
 import com.example.comm.pojo.customer.Customer;
+import com.example.comm.pojo.orders.Orders;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.relational.core.sql.In;
 
@@ -39,6 +40,18 @@ public interface CustomerMapper {
      */
     public int updateCustomerByCids(@Param("c_id") Integer c_id) throws Exception;
 
+    /**
+     * 通过端口获取客户名称
+     * @param o_port
+     * @return
+     * @throws Exception
+     */
+    public List<Customer> getCustomerByPort(@Param("o_port") String o_port) throws Exception;
 
+    /**
+     * 后台
+     */
+    //跟根客户名称查询
+    public Customer getCustomerByName(@Param("customer_name") String customer_name) throws Exception;
 
 }

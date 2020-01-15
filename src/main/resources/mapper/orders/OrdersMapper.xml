@@ -42,6 +42,20 @@
         SELECT COUNT(1) FROM orders WHERE c_id=(SELECT c_id FROM orders WHERE o_orderid=#{o_orderid})
         <if test="o_complete!=null and o_complete!=''">AND o_complete=1</if>
     </select>
+    <select id="getOrdersByOids" resultType="com.example.comm.pojo.orders.Orders">
+        select * from orders where o_orderid = #{o_orderid} AND IFNULL(o_port,'')!=''
+    </select>
+    <select id="getOrdersList" resultType="com.example.comm.pojo.orders.Orders">
+        select * from orders
+        <trim prefix="where" prefixOverrides="AND |OR">
+            <if test="c_id != null and c_id != ''">
+                and c_id = #{c_id}
+            </if>
+            <if test="o_orderid != null and o_orderid != ''">
+                and o_orderid = #{o_orderid}
+            </if>
+        </trim>
+    </select>
 
 
 </mapper>

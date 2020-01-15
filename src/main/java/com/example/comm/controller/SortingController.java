@@ -32,7 +32,7 @@ import java.util.List;
  */
 
 
-@Controller
+@RestController
 @RequestMapping(value = "/sorting")
 public class SortingController {
 
@@ -61,6 +61,7 @@ public class SortingController {
     public static AllocationService allocationService2;
 
 
+
     @RequestMapping("/index")
     public String helloSpringBoot() {
         System.out.println("进入Index界面");
@@ -70,6 +71,7 @@ public class SortingController {
     @RequestMapping(value = "/getCursors", method = RequestMethod.POST)
     @ResponseBody
     public List<Cursors> getCursors() throws Exception {
+        //System.out.println("cookie:"+cookie);@CookieValue("JSESSIONID") String cookie
         System.out.println("进行AJAX");
         List<Cursors> cursors = cursoursService.getCursors();
         return cursors;
@@ -90,12 +92,10 @@ public class SortingController {
 
     @RequestMapping(value = "/ng", method = RequestMethod.POST)
     @ResponseBody
-    public Ng ng(@RequestParam("ng") String ng) throws Exception {
-        System.out.println("进行AJAX");
-        System.out.println("ng" + ng);
-        Ng ng1 = ngService.getNg();
-        System.out.println("时间" + ng1.getN_date());
-        return ng1;
+    public List<Ng> ng() throws Exception {
+        System.out.println("进行ng");
+        List<Ng> ngList = ngService.getNgList();
+        return ngList;
     }
 
     //在面界中显示出订单信息
@@ -132,6 +132,16 @@ public class SortingController {
         System.out.println("未完成状态:"+complete);
         int ordersByOrderId = ordersService.getOrdersByOrderId(orderids,complete);
         return ordersByOrderId;
+    }
+
+    //在面界中显示出订单信息
+    @RequestMapping(value = "/updateCursorsBydisplayStatus", method = RequestMethod.POST)
+    @ResponseBody
+    public Integer updateCursorsBydisplayStatus(@RequestParam("c_out")String c_out) throws Exception {
+        System.out.println("修改显示装态");
+        int i = cursoursService.updateCursorsBydisplayStatus(c_out);
+        System.out.println("修改状态:"+i);
+        return i;
     }
 
 

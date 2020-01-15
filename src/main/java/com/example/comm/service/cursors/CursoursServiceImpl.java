@@ -33,4 +33,11 @@ public class CursoursServiceImpl implements CursoursService {
     public List<Cursors> getCursors() throws Exception {
         return cursorsMapper.getCursors();
     }
+
+    @Override
+    public int updateCursorsBydisplayStatus(String c_out) throws Exception {
+        return cursorsMapper.updateCursorsBydisplayStatus(c_out);
+    }
+
+
 }

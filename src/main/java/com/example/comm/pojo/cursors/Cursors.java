@@ -22,6 +22,7 @@ public class Cursors {
   private Date c_time;
   private String c_customername;
   private Integer c_number;
+  private Integer c_displayStatus;
 
   @Override
   public String toString() {
@@ -37,6 +38,7 @@ public class Cursors {
             ", c_time=" + c_time +
             ", c_customername='" + c_customername + '\'' +
             ", c_number=" + c_number +
+            ", c_displayStatus=" + c_displayStatus +
             '}';
   }
 }

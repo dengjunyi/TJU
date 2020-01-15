@@ -38,4 +38,12 @@ public interface CursorsMapper {
      */
     public List<Cursors> getCursors() throws Exception;
 
+    /**
+     * 修改显示状态
+     * @param c_out
+     * @return
+     * @throws Exception
+     */
+    public int updateCursorsBydisplayStatus(@Param("c_out") String c_out) throws Exception;
+
 }

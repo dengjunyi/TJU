@@ -38,4 +38,26 @@ public interface PorttableMapper {
      */
     public int updatePorttableByPort(@Param("p_port")String p_port) throws Exception;
 
+    /**
+     * 查询端口表
+     * @return
+     * @throws Exception
+     */
+    public List<Porttable> getPorttableList() throws Exception;
+
+    /**
+     * 添加端口
+     * @param p_port
+     * @return
+     * @throws Exception
+     */
+    public int addPort(@Param("p_port")String p_port) throws Exception;
+
+    /**
+     * 删除端口
+     * @param p_id
+     * @return
+     * @throws Exception
+     */
+    public int delPort(@Param("p_id")Integer p_id) throws Exception;
 }

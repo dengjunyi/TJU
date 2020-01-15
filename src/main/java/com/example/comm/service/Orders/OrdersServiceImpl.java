@@ -13,6 +13,12 @@ public class OrdersServiceImpl implements OrdersService {
     @Resource
     private OrdersMapper ordersMapper;
 
+
+    @Override
+    public List<Orders> getOrdersList(String c_id, String o_orderid) throws Exception {
+        return ordersMapper.getOrdersList(c_id,o_orderid);
+    }
+
     @Override
     public List<Orders> getOrdersByCid(Integer c_id) throws Exception {
         return ordersMapper.getOrdersByCid(c_id);
@@ -34,6 +40,11 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
+    public Orders getOrdersByOids(String o_orderid) throws Exception {
+        return ordersMapper.getOrdersByOids(o_orderid);
+    }
+
+    @Override
     public int updateOrdersByOid(String o_orderid) throws Exception {
         return ordersMapper.updateOrdersByOid(o_orderid);
     }
@@ -52,4 +63,6 @@ public class OrdersServiceImpl implements OrdersService {
     public int getOrdersByOrderId(String o_orderid, String o_complete) throws Exception {
         return ordersMapper.getOrdersByOrderId(o_orderid,o_complete);
     }
+
+
 }

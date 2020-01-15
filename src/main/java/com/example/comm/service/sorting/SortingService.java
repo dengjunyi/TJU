@@ -22,6 +22,14 @@ public interface SortingService {
      */
     public int updateSorting(Sorting sorting) throws Exception;
 
+    /**
+     * 添加一条数据到详细表
+     */
+    public int addSorting(Sorting sorting) throws Exception;
 
+    /**
+     * 获取条形码最后扫描到的一条数据
+     */
+    public Sorting getSortingByDate(String s_barcode) throws Exception;
 
 }

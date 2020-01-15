@@ -13,7 +13,7 @@ import java.util.List;
  * Sorting业务实现层
  */
 @Service
-public class SortingServiceImpl implements SortingService {
+public class SortingServiceImpl implements SortingService{
 
     @Resource
     private SortingMapper sortingMapper;//获取资源
@@ -27,5 +27,15 @@ public class SortingServiceImpl implements SortingService {
     @Override
     public int updateSorting(Sorting sorting) throws Exception {
         return sortingMapper.updateSorting(sorting);
+    }
+
+    @Override
+    public int addSorting(Sorting sorting) throws Exception {
+        return sortingMapper.addSorting(sorting);
+    }
+
+    @Override
+    public Sorting getSortingByDate(String s_barcode) throws Exception {
+        return sortingMapper.getSortingByDate(s_barcode);
     }
 }

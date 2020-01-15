@@ -2,6 +2,8 @@ package com.example.comm.dao.ng;
 
 import com.example.comm.pojo.ng.Ng;
 
+import java.util.List;
+
 public interface NgMapper {
 
     /**
@@ -18,4 +20,11 @@ public interface NgMapper {
      * @throws Exception
      */
     public int addNg(Ng ng) throws Exception;
+
+    /**
+     * 查询ng表最后五条数据
+     * @return
+     * @throws Exception
+     */
+    public List<Ng> getNgList() throws Exception;
 }

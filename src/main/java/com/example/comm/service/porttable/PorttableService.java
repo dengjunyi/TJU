@@ -27,4 +27,19 @@ public interface PorttableService {
      */
     public int updatePorttableByPort(String p_port) throws Exception;
 
+    /**
+     * 查询端口表
+     */
+    public List<Porttable> getPorttableList() throws Exception;
+
+    /**
+     * 添加端口
+     */
+    public int addPort(String p_port) throws Exception;
+
+    /**
+     * 删除端口
+     */
+    public int delPort(Integer p_id) throws Exception;
+
 }

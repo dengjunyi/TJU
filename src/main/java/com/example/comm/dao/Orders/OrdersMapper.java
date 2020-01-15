@@ -8,6 +8,13 @@ import java.util.List;
 public interface OrdersMapper {
 
     /**
+     * 显示所有订单表的数据
+     * @return
+     * @throws Exception
+     */
+    public List<Orders> getOrdersList(@Param("c_id") String c_id,@Param("o_orderid") String o_orderid) throws Exception;
+
+    /**
      * 查询此客户的订单里未分拣完成的订单
      * @param c_id
      * @return
@@ -38,6 +45,14 @@ public interface OrdersMapper {
      * @throws Exception
      */
     public Orders getOrdersByOid(@Param("o_orderid") String o_orderid) throws Exception;
+
+    /**
+     * 通过订单号来查询订单信息端口号不为空
+     * @param o_orderid
+     * @return
+     * @throws Exception
+     */
+    public Orders getOrdersByOids(@Param("o_orderid") String o_orderid) throws Exception;
 
     /**
      * 修改订单号分配完成

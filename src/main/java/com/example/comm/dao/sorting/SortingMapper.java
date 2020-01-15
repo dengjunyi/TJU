@@ -22,5 +22,20 @@ public interface SortingMapper {
      */
     public int updateSorting(Sorting sorting) throws Exception;
 
+    /**
+     * 添加一条数据到详细表
+     * @param sorting
+     * @return
+     * @throws Exception
+     */
+    public int addSorting(Sorting sorting) throws Exception;
+
+    /**
+     * 获取条形码最后扫描到的一条数据
+     * @return
+     * @throws Exception
+     */
+    public Sorting getSortingByDate(@Param("s_barcode") String s_barcode) throws Exception;
+
 
 }

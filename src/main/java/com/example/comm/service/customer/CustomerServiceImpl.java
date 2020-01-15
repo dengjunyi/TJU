@@ -32,4 +32,16 @@ public class CustomerServiceImpl implements CustomerService {
     public int updateCustomerByCids(Integer c_id) throws Exception {
         return customerMapper.updateCustomerByCids(c_id);
     }
+
+    @Override
+    public List<Customer> getCustomerByPort(String o_port) throws Exception {
+        return customerMapper.getCustomerByPort(o_port);
+    }
+
+    @Override
+    public Customer getCustomerByName(String customer_name) throws Exception {
+        return customerMapper.getCustomerByName(customer_name);
+    }
+
+
 }
