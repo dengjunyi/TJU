@@ -47,7 +47,6 @@ public class WebSocketServer2 {
 			serverBootstrap.option(ChannelOption.SO_BACKLOG, 64) ; // 当处理线程全满时的最大等待队列长度
 			// 7、绑定服务器端口并且进行服务的启动
 			ChannelFuture future = serverBootstrap.bind(5230).sync() ;	// 异步线程处理
-            //System.out.println("future:"+future.);
 			future.channel().closeFuture().sync() ; // 处理完成之后进行关闭
 		} catch (Exception e) {
 			boosGroup.shutdownGracefully() ;	// 关闭主线程池
