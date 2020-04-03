@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.comm.dao.porttable.PorttableMapper">
+    <insert id="addPort">
+        INSERT INTO porttable(p_port,p_state) VALUES (#{p_port},0)
+    </insert>
+    <delete id="delPort">
+        DELETE FROM porttable WHERE p_id=#{p_id}
+    </delete>
+
+    <select id="getPorttableByPort" resultType="com.example.comm.pojo.porttable.Porttable">
+        SELECT * FROM porttable WHERE p_port=#{p_port}
+    </select>
+    <update id="updatePorttable">
+        UPDATE porttable SET p_state=0 WHERE p_port=#{p_port}
+    </update>
+    <select id="getPorttable" resultType="com.example.comm.pojo.porttable.Porttable">
+        SELECT * FROM porttable WHERE p_state=0
+    </select>
+    <select id="getPorttableList" resultType="com.example.comm.pojo.porttable.Porttable">
+        SELECT * FROM porttable
+    </select>
+    <update id="updatePorttableByPort">
+        UPDATE porttable SET p_state=1 WHERE p_port=#{p_port}
+    </update>
+
+</mapper>
