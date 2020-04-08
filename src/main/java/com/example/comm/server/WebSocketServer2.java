@@ -40,7 +40,7 @@ public class WebSocketServer2 {
 					ch.pipeline().addLast(new HttpObjectAggregator(1024 * 1024 * 100)) ; // 设置最大上传容量为10M
 //					ch.pipeline().addLast(new HttpResponseEncoder()) ;
 					ch.pipeline().addLast(new ChunkedWriteHandler()) ; // 进行传输
-					ch.pipeline().addLast(new WebSocketServerHandler2()) ; // 自定义程序处理逻辑
+					ch.pipeline().addLast(new WebSocketServerHandler2_dingdanhao9()) ; // 自定义程序处理逻辑
 				} 
 			}) ;
 			// 6、由于当前的服务器主要实现的是一个TCP的回应处理程序，那么在这样的情况下就必须进行一些TCP属性配置

@@ -21,6 +21,7 @@
             }
             webSocket.onclose = function () {
                 alert("已经和服务器断开连接。");
+                // document.getElementById("contentDiv").innerHTML += "<p>已经和服务器断开连接。</p>";
             }
 
             $(document).ready(function () {
@@ -57,9 +58,11 @@
 
             //显示分拣信息
             $.post("/sorting/getCursors", {}, function (data) {
-                var strs = "<tr class='jz'><th class='jz'>客户名称1</th><th class='jz'>线路</th><th class='jz'>订单号</th><th class='jz'>订单数</th><th class='jz' id='sums'>订单已分拣数</th><th class='jz'>条码</th> <th class='jz'>OUT</th> <th class='jz'>规格</th> <th class='jz'>描述</th> <th class='jz'>物品总数量</th> <th class='jz'>已分拣物品数量</th><th class='jz'>日期</th> </tr>";
+               // alert("6666");
+                var strs = "<tr class='jz'><th class='jz'>客户名称1</th><th class='jz'>线路</th><th class='jz'>订单号</th><th class='jz'>订单数</th><th class='jz' id='sums'>订单已分拣数</th><th class='jz'>条码</th> <th class='jz'>OUT</th> <th class='jz'>规格</th> <th class='jz'>描述</th> <th class='jz'>物品总数量</th> <th class='jz'>已分拣物品数量</th> <th class='jz' style=''>重量</th><th class='jz'>日期</th> </tr>";
                 $("#tbodys").html(strs);
                 var str = "";
+                //alert("最外层!")
                 for (var i = 0; i < data.length; i++) {
                     var complete = "";
                     $.ajaxSettings.async = false;
@@ -89,12 +92,23 @@
                         $("#sums").hide();
                     }
                     var c_out = "a" + (data[i].c_out).substring(1, 3);
-                    str += "<tr style='" + css + ";text-align: center'><td id=" + data[i].c_customername + " class='customername'>" + data[i].c_customername + "</td><td>一号线</td><td id=" + +data[i].c_order + ">" + data[i].c_order + "</td><td>" + sum + "</td><td id='sums' style='" + dis + "'>" + sums + "</td><td>" + data[i].c_barcode + "</td><td id=" + c_out + ">" + data[i].c_out + "</td><td>" + data[i].c_specification + "</td><td>" + data[i].c_Item_info + "</td><td >" + data[i].c_count + "</td><td>" + data[i].c_number + "</td><td class='text-align:center;'>" + data[i].c_time + "</td></tr>";
-                    str += "<tr style='" + css + ";text-align: center'><td id=" + data[i].c_customername + " class='customername'>" + data[i].c_customername + "</td><td>一号线</td><td id=" + +data[i].c_order + ">" + data[i].c_order + "</td><td>" + sum + "</td><td id='sums' style='" + dis + "'>" + sums + "</td><td>" + data[i].c_barcode + "</td><td id=" + c_out + ">" + data[i].c_out + "</td><td>" + data[i].c_specification + "</td><td>" + data[i].c_Item_info + "</td><td >" + data[i].c_count + "</td><td>" + data[i].c_number + "</td><td class='text-align:center;'>" + data[i].c_time + "</td></tr>";
+                    str += "<tr style='" + css + ";text-align: center'><td id=" + data[i].c_customername + " class='customername'>" + data[i].c_customername + "</td><td>一号线</td><td id=" + +data[i].c_order + ">" + data[i].c_order + "</td><td>" + sum + "</td><td id='sums' style='" + dis + "'>" + sums + "</td><td>" + data[i].c_barcode + "</td><td id=" + c_out + ">" + data[i].c_out + "</td><td>" + data[i].c_specification + "</td><td>" + data[i].c_Item_info + "</td><td >" + data[i].c_count + "</td><td>" + data[i].c_number + "</td><td>"+data[i].c_weight+"kg</td><td class='text-align:center;'>" + data[i].c_time + "</td></tr>";
+                    str += "<tr style='" + css + ";text-align: center'><td id=" + data[i].c_customername + " class='customername'>" + data[i].c_customername + "</td><td>一号线</td><td id=" + +data[i].c_order + ">" + data[i].c_order + "</td><td>" + sum + "</td><td id='sums' style='" + dis + "'>" + sums + "</td><td>" + data[i].c_barcode + "</td><td id=" + c_out + ">" + data[i].c_out + "</td><td>" + data[i].c_specification + "</td><td>" + data[i].c_Item_info + "</td><td >" + data[i].c_count + "</td><td>" + data[i].c_number + "</td><td>"+data[i].c_weight+"kg</td><td class='text-align:center;'>" + data[i].c_time + "</td></tr>";
 
                     css = "";
                 }
                 $("#tbody").append(str);
+                /* if (Number(state) == 1) {
+                     $("body [class='customername']").each(function () {
+                         var ids = $(this).attr("id");
+                        // alert("ids:" + ids);
+                        // alert($("body [class=" + ids + "]").length);
+                         if ($("body [class=" + ids + "]").length >= 2) {
+                             $("." + ids + ":not(:first)").parent().hide();
+                         }
+                     });
+                 }*/
+
                 if (Number(state) == 1) {
                     $("body [class='customername']").each(function () {
                         var ids = $(this).attr("id");
@@ -111,9 +125,12 @@
 
             //判断是否给Ng添加滚动条
             function ngwrap() {
+                //alert("先执行获取长度1");
                 var ngheight = $("#tbody_ng").height();
+                //alert("ng的长度:" + ngheight);
                 if (ngheight > 200) {
                     $("#ngWarp").wrap("<div id='overflowTestNg' style='margin-top: 150px'></div>");
+                    // $("#ngWarp").removeClass(".ngClass");
                     $("#ngWarp").css("margin-top", "auto");
                 }
             }
@@ -123,10 +140,13 @@
                 //alert("先执行代码");
                 $("#tbody_ng").html("");
                 $.post("/sorting/ng", function (data) {
-                    var str = "<tr><td COLSPAN='10'>NG</td></tr><tr class='jz'><th class='jz'>客户名称</th><th class='jz'>线路</th><th class='jz'>订单号</th><th class='jz'>条码</th> <th class='jz'>OUT</th> <th class='jz'>规格</th> <th class='jz'>描述</th><th class='jz'>日期</th> </tr>";
+                    var str = "<tr><td COLSPAN='10'>NG</td></tr><tr class='jz'><th class='jz'>客户名称</th><th class='jz'>线路</th><th class='jz'>订单号</th><th class='jz'>条码</th> <th class='jz'>OUT</th> <th class='jz'>规格</th> <th class='jz'>描述</th><th class='jz' style=''>重量</th><th class='jz'>日期</th> </tr>";
+                    //var str = "<tr><td COLSPAN='10'>NG</td></tr><tr><td>条形码</td><td>时间</td><td>数量</td></tr>";
                     for (var i = 0; i < data.length; i++) {
-                        str += "<tr text-align: center><td >" + data[i].n_name + "</td><td>一号线</td><td>" + data[i].n_oid + "</td><td>" + data[i].n_barcode + "</td><td>" + data[i].n_out + "</td><td>" + data[i].n_Specifications + "</td><td>" + data[i].n_Item_info + "</td><td>" + data[i].n_date + "</td></tr>";
+                        //str += "<tr><td id=" + data[i].n_barcode + ">" + data[i].n_barcode + "</td><td>" + data[i].n_date + "</td><td>" + data[i].n_number + "</td></tr>";
+                        str += "<tr text-align: center><td >" + data[i].n_name + "</td><td>一号线</td><td>" + data[i].n_oid + "</td><td>" + data[i].n_barcode + "</td><td>" + data[i].n_out + "</td><td>" + data[i].n_Specifications + "</td><td>" + data[i].n_Item_info + "</td><td >"+data[i].n_weight+"kg</td><td>" + data[i].n_date + "</td></tr>";
                     }
+                    // alert(data.length);
                     if (data.length == 0) {
                         $("#tbody_ng").html();
                     } else {
@@ -165,7 +185,7 @@
                 var str = "";
                 var idS = (obj.data).substring(0, 1);
                 if (obj.data == "state") {
-                    alert("未选择分配状态,请在后台设置");
+                    alert("未选择分配状态");
                 } else if (obj.data == "ng") {
                     ngList();
                 } else if (obj.data == "ununited") {
@@ -175,10 +195,12 @@
                     alert("还没有称重!");
                     $("#sendBut").attr("disabled", false);
                 } else if (idS == "&") {
+                    //alert("返回值:" + idS);
                     var id = (obj.data).substring(1, 3);
                     var evalID = $(eval("a" + id)).text();
                     console.log("添加的字符:" + id);
                     if (evalID == obj.data) {
+                        //alert("有此端口");
                         $(eval("a" + id)).parent().hide();
                         $.post("/sorting/updateCursorsBydisplayStatus", {c_out: evalID}, function (data) {
                             //alert("修改成功!")
@@ -306,9 +328,6 @@
         }
     </script>
     <style>
-        body{
-            background-color: #f2dede;
-        }
         #overflowTest {
             /* background: #4CAF50;*/
             /* color: white;*/
@@ -366,14 +385,14 @@
                 </tbody>
             </table>
         </div>
-     <!--   <div class="col-md-1" style="margin-left: 1790px;margin-top: 100px;">
+        <div class="col-md-1" style="margin-left: 1790px;margin-top: 100px;">
             <form action="" id="formButton">
                 <input type="radio" name="sex" value="customer" checked>客户
                 <input style="margin-left: 10px" type="radio" name="sex" value="barcode">订单
                 <button style="margin-left: 10px" class="btn btn-primary" type="button" id="sendBut">自动分配</button>
             </form>
             <h5 style="margin-top: 15rem;color:blue;margin-left: 2rem;position: fixed">Ver1.0.0</h5>
-        </div>-->
+        </div>
     </section>
 </div>
 <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>

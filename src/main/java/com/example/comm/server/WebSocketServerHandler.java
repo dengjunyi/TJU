@@ -33,7 +33,7 @@ public class WebSocketServerHandler extends ChannelHandlerAdapter {
 		//返回给网页的信息
 		//channelGroup.writeAndFlush(new TextWebSocketFrame(echoValue));
 		//把网页发送的条形码传入硬件
-		new WebSocketServerHandler2().channelRead(ctx,echoValue);
+		new WebSocketServerHandler2_dingdanhao9().channelRead(ctx,echoValue);
 	} 
 
 	/**

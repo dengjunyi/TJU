@@ -50,7 +50,11 @@ public class WebSocketServerHandler2_dingdanhao9 extends ChannelHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        System.out.println("调用分拣");
         System.out.println("************* 硬件channelRead *************");
+        System.out.println(new Date().toString());
+        System.out.println("list："+list.size());
+        System.out.println("打印:"+group.size());
         if (group.size() > 0) {
             for (int i = 0; i < list.size(); i++) {
                 System.out.println("第" + (i + 1) + "客户端的ID:" + list.get(i));
@@ -105,6 +109,7 @@ public class WebSocketServerHandler2_dingdanhao9 extends ChannelHandlerAdapter {
             //获取分配状态
             Allocation allocation = SortingController.allocationService2.getAllocation();
             Integer a_state = allocation.getA_state();
+
             //还未选择是按客户分配还是订单分配
             if (a_state == 0) {
                 System.out.println("未选择哪种分配方式");
@@ -477,14 +482,9 @@ public class WebSocketServerHandler2_dingdanhao9 extends ChannelHandlerAdapter {
             System.out.println("第" + (i + 1) + "客户端的ID:" + list.get(i));
         }
 
-
-       /* ByteBuf echoBuf = Unpooled.buffer(echoContent.length());
-        echoBuf.writeBytes(echoContent.getBytes());
-        group.writeAndFlush(echoBuf);*/
-        //channel.writeAndFlush(new TextWebSocketFrame("ng1"));
-
         // 先写入到客户端，最后再将自己添加到ChannelGroup中
         group.add(channel);
+        System.out.println("添加:"+group.size());
     }
 
 

@@ -52,6 +52,7 @@ public class WebSocketServerHandler2 extends ChannelHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         System.out.println("************* 硬件channelRead *************");
+        System.out.println();
         if (group.size() > 0) {
             for (int i = 0; i < list.size(); i++) {
                 System.out.println("第" + (i + 1) + "客户端的ID:" + list.get(i));
